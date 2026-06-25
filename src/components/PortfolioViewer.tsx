@@ -5,10 +5,12 @@ import { getAllProjects } from "@/lib/projects";
 import ProjectNav from "@/components/ProjectNav";
 import CaseStudy3DIllustrations from "@/components/case-studies/CaseStudy3DIllustrations";
 import CaseStudyExpressiveTheming from "@/components/case-studies/CaseStudyExpressiveTheming";
+import CaseStudySmartTemplates from "@/components/case-studies/CaseStudySmartTemplates";
 
 const caseStudies: Record<string, React.ComponentType> = {
   "3d-illustrations": CaseStudy3DIllustrations,
   "expressive-theming": CaseStudyExpressiveTheming,
+  "smart-templates": CaseStudySmartTemplates,
 };
 
 const allProjects = getAllProjects();
