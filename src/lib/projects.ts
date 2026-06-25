@@ -170,7 +170,7 @@ export const projectGroups: CompanyGroup[] = [
         id: "smart-templates",
         title: "Smart Templates",
         year: "2019",
-        hook: "Turning Microsoft 365 into a personal productivity platform through intelligent, data-connected templates.",
+        hook: "Turning static templates into live, data-connected apps inside the spreadsheet.",
         description:
           "Delivered 10+ smart templates as premium content offered via M365 consumer subscription. Designed high-value consumer templates using Wolfram data through a new capability called datatypes, enabling templates to update automatically with real-world information.",
         videoUrl: "/projects/smart-templates/01-Excel-x-Wolfram-templates.mp4",

@@ -44,7 +44,7 @@ export default function CaseStudy3DIllustrations() {
   return (
     <div className="flex flex-col gap-2 items-center w-full">
       {/* Hero */}
-      <div className="w-full aspect-video rounded-2xl overflow-hidden" style={{ background: "#1a1a1a" }}>
+      <div className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>
         <video
           className="w-full h-full object-cover"
           src="/projects/3d-illustrations/01-3D-Illustrations.mp4"
@@ -68,7 +68,7 @@ export default function CaseStudy3DIllustrations() {
       </div>
 
       {/* Problem — full-width image */}
-      <img className="w-full aspect-video rounded-2xl object-cover" src={`${BASE}/problem.webp`} alt="" />
+      <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/problem.webp`} alt="" />
 
       {/* Approach — text right (2 col) */}
       <div className="flex gap-2 w-full items-start">
@@ -85,8 +85,8 @@ export default function CaseStudy3DIllustrations() {
 
       {/* Two-up images — 16:9 each */}
       <div className="flex gap-2 w-full">
-        <img className="flex-1 min-w-px aspect-video rounded-2xl object-cover" src={`${BASE}/block-a.webp`} alt="" />
-        <img className="flex-1 min-w-px aspect-video rounded-2xl object-cover" src={`${BASE}/block-b.webp`} alt="" />
+        <img className="flex-1 min-w-px aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/block-a.webp`} alt="" />
+        <img className="flex-1 min-w-px aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/block-b.webp`} alt="" />
       </div>
 
       {/* Approach text (1/3) + 3-image strip (2/3) */}
@@ -98,7 +98,7 @@ export default function CaseStudy3DIllustrations() {
           </p>
         </TextBlock>
         <div
-          className="flex h-full rounded-2xl overflow-hidden"
+          className="flex h-full rounded-2xl overflow-hidden border border-gray-900"
           style={{ flex: "744 1 0", background: "#1a1a1a" }}
         >
           <img className="flex-1 min-w-px h-full object-cover" src={`${BASE}/strip-1.webp`} alt="" />
@@ -110,7 +110,7 @@ export default function CaseStudy3DIllustrations() {
       {/* Device on light bg (2/3) + Approach text (1/3) */}
       <div className="flex gap-2 w-full" style={{ height: 620 }}>
         <div
-          className="flex items-center justify-center h-full rounded-2xl overflow-hidden"
+          className="flex items-center justify-center h-full rounded-2xl overflow-hidden border border-gray-900"
           style={{ flex: "744 1 0", background: "#e6e6e6" }}
         >
           <img className="object-contain" style={{ height: 450 }} src={`${BASE}/device.webp`} alt="" />
@@ -124,8 +124,8 @@ export default function CaseStudy3DIllustrations() {
       </div>
 
       {/* Full-width images */}
-      <img className="w-full rounded-2xl" src={`${BASE}/wide-1.webp`} alt="" />
-      <img className="w-full rounded-2xl" src={`${BASE}/wide-2.webp`} alt="" />
+      <img className="w-full rounded-2xl border border-gray-900" src={`${BASE}/wide-1.webp`} alt="" />
+      <img className="w-full rounded-2xl border border-gray-900" src={`${BASE}/wide-2.webp`} alt="" />
 
       {/* Outcome (2 col) + Credits (1 col) — fixed pair, 300px tall */}
       <div className="flex gap-2 w-full" style={{ height: 300 }}>

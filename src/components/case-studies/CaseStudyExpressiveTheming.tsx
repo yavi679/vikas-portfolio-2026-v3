@@ -132,7 +132,7 @@ function ThemeShowcase() {
   const pick = (v: string) => setSel((s) => ({ ...s, [theme]: v }));
 
   return (
-    <div className="w-full relative aspect-video rounded-2xl overflow-hidden" style={{ background: "#1a1a1a" }}>
+    <div className="w-full relative aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>
       {/* showcase image */}
       <img
         key={src}
@@ -285,7 +285,7 @@ export default function CaseStudyExpressiveTheming() {
       </div>
 
       {/* Problem — full-width image */}
-      <img className="w-full aspect-video rounded-2xl object-cover" src={`${BASE}/problem-1.webp`} alt="" />
+      <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/problem-1.webp`} alt="" />
 
       {/* Approach — text right (2 col) */}
       <div className="flex gap-2 w-full items-start">
@@ -300,7 +300,7 @@ export default function CaseStudyExpressiveTheming() {
       </div>
 
       {/* Approach — full-width image */}
-      <img className="w-full aspect-video rounded-2xl object-cover" src={`${BASE}/problem-2.webp`} alt="" />
+      <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/problem-2.webp`} alt="" />
 
       {/* Color themes — text left (1 col) */}
       <div className="flex gap-2 w-full items-start">
@@ -315,10 +315,10 @@ export default function CaseStudyExpressiveTheming() {
 
       {/* Two-up images — 16:9 each */}
       <div className="flex gap-2 w-full">
-        <div className="flex-1 min-w-px aspect-video rounded-2xl overflow-hidden" style={{ background: "#1a1a1a" }}>
+        <div className="flex-1 min-w-px aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>
           <img className="w-full h-full object-cover" src={`${BASE}/two-1.webp`} alt="" />
         </div>
-        <div className="flex-1 min-w-px aspect-video rounded-2xl overflow-hidden" style={{ background: "#ffffff" }}>
+        <div className="flex-1 min-w-px aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#ffffff" }}>
           <img className="w-full h-full object-cover" src={`${BASE}/two-2.webp`} alt="" />
         </div>
       </div>
@@ -332,8 +332,8 @@ export default function CaseStudyExpressiveTheming() {
       </div>
 
       {/* Full-width images */}
-      <img className="w-full aspect-video rounded-2xl object-cover" src={`${BASE}/problem-3.webp`} alt="" />
-      <img className="w-full aspect-video rounded-2xl object-cover" src={`${BASE}/problem-4.webp`} alt="" />
+      <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/problem-3.webp`} alt="" />
+      <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/problem-4.webp`} alt="" />
 
       {/* Outcome (2 col) + Credits (1 col) — fixed pair, 300px tall */}
       <div className="flex gap-2 w-full" style={{ height: 300 }}>

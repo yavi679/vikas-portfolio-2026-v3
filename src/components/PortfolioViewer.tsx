@@ -6,11 +6,15 @@ import ProjectNav from "@/components/ProjectNav";
 import CaseStudy3DIllustrations from "@/components/case-studies/CaseStudy3DIllustrations";
 import CaseStudyExpressiveTheming from "@/components/case-studies/CaseStudyExpressiveTheming";
 import CaseStudySmartTemplates from "@/components/case-studies/CaseStudySmartTemplates";
+import CaseStudyUXRedesigns from "@/components/case-studies/CaseStudyUXRedesigns";
+import CaseStudyGenerativeSFX from "@/components/case-studies/CaseStudyGenerativeSFX";
 
 const caseStudies: Record<string, React.ComponentType> = {
+  "generative-sfx": CaseStudyGenerativeSFX,
   "3d-illustrations": CaseStudy3DIllustrations,
   "expressive-theming": CaseStudyExpressiveTheming,
   "smart-templates": CaseStudySmartTemplates,
+  "ux-redesigns": CaseStudyUXRedesigns,
 };
 
 const allProjects = getAllProjects();
