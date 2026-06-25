@@ -1,9 +1,11 @@
 "use client";
 
-/* Pixel-match of Figma node 676:1295 — "3D Illustrations" case study.
-   Content grid is 1120px wide, 8px gaps, 16px radius. Block widths are
-   expressed as flex ratios (744 : 368 → 2/3 : 1/3) so the composition holds
-   its proportions while filling the available column. */
+/* Based on Figma node 676:1295 — "3D Illustrations" case study (refined layout).
+   Half-width captions alternate left/right and bracket full-width media; headers
+   only on Problem / Approach / Outcome / Credits / My contributions. Two grid
+   bands show the illustration library in light and dark. Copy in portfolio
+   voice (see VOICE.md). The Figma hero is an empty placeholder, so the existing
+   hero reel is kept. */
 
 const BASE = "/projects/3d-illustrations/case-study";
 
@@ -13,11 +15,11 @@ const BODY = { color: "#e6e6e6", fontSize: "1rem", letterSpacing: "-0.16px" } as
 function TextBlock({
   label,
   children,
-  align = "bottom",
+  align = "top",
   className = "",
   style,
 }: {
-  label: string;
+  label?: string;
   children: React.ReactNode;
   align?: "top" | "bottom";
   className?: string;
@@ -40,6 +42,26 @@ function TextBlock({
   );
 }
 
+/* A half-width caption pinned to one side; width matches a full-width media's
+   half exactly: (100% - 8px gap) / 2. */
+function Caption({
+  side,
+  label,
+  children,
+}: {
+  side: "left" | "right";
+  label?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex w-full" style={{ justifyContent: side === "left" ? "flex-start" : "flex-end" }}>
+      <TextBlock label={label} style={{ width: "calc(50% - 4px)" }}>
+        {children}
+      </TextBlock>
+    </div>
+  );
+}
+
 export default function CaseStudy3DIllustrations() {
   return (
     <div className="flex flex-col gap-2 items-center w-full">
@@ -55,93 +77,95 @@ export default function CaseStudy3DIllustrations() {
         />
       </div>
 
-      {/* Problem — text left (2 col) */}
-      <div className="flex gap-2 w-full items-start">
-        <TextBlock label="Problem" style={{ flex: "744 1 0" }}>
-          <p className="leading-[1.35]">
-            Existing illustrations were flat, literal, and inconsistent often functioning as
-            decorative elements disconnected from the interface. Horizontal brand systems lacked
-            product-specific nuance.
-          </p>
-        </TextBlock>
-        <div style={{ flex: "368 1 0" }} />
-      </div>
+      {/* Problem — caption left */}
+      <Caption side="left" label="Problem">
+        <p className="leading-[1.35]">
+          Outlook&apos;s illustrations were flat, literal, and inconsistent. They read as decoration
+          disconnected from the interface around them, and the company-wide brand system had no
+          product-specific nuance for Outlook.
+        </p>
+      </Caption>
 
-      {/* Problem — full-width image */}
+      {/* Full-width media */}
       <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/problem.webp`} alt="" />
 
-      {/* Approach — text right (2 col) */}
-      <div className="flex gap-2 w-full items-start">
-        <div style={{ flex: "368 1 0" }} />
-        <TextBlock label="Approach" style={{ flex: "744 1 0" }}>
-          <p className="leading-[1.35]">
-            Partnered closely with the Fluent design team to define a product-specific visual
-            grammar for Outlook, introducing dimensional forms with integrated depth and elevation,
-            symbolic, inclusive metaphors over literal depictions, and shared color and material
-            systems aligned with Fluent.
-          </p>
-        </TextBlock>
-      </div>
+      {/* Approach — caption right */}
+      <Caption side="right" label="Approach">
+        <p className="leading-[1.35]">
+          I partnered closely with the Fluent design team to define a visual grammar built for
+          Outlook. That meant dimensional forms with real depth and elevation, symbolic and inclusive
+          metaphors instead of literal depictions, and color and material systems shared with Fluent.
+        </p>
+      </Caption>
 
-      {/* Two-up images — 16:9 each */}
+      {/* Two-up media */}
       <div className="flex gap-2 w-full">
-        <img className="flex-1 min-w-px aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/block-a.webp`} alt="" />
-        <img className="flex-1 min-w-px aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/block-b.webp`} alt="" />
+        <img className="flex-1 min-w-px aspect-[556/250] rounded-2xl object-cover border border-gray-900" src={`${BASE}/two-a.webp`} alt="" />
+        <img className="flex-1 min-w-px aspect-[556/250] rounded-2xl object-cover border border-gray-900" src={`${BASE}/two-b.webp`} alt="" />
       </div>
 
-      {/* Approach text (1/3) + 3-image strip (2/3) */}
-      <div className="flex gap-2 w-full" style={{ height: 620 }}>
-        <TextBlock label="" align="top" className="self-start" style={{ flex: "368 1 0" }}>
-          <p className="leading-[1.35]">
-            Balanced system consistency with product identity adapting the broader language while
-            ensuring relevance to Outlook users.
-          </p>
-        </TextBlock>
-        <div
-          className="flex h-full rounded-2xl overflow-hidden border border-gray-900"
-          style={{ flex: "744 1 0", background: "#1a1a1a" }}
-        >
-          <img className="flex-1 min-w-px h-full object-cover" src={`${BASE}/strip-1.webp`} alt="" />
-          <img className="flex-1 min-w-px h-full object-cover" src={`${BASE}/strip-2.webp`} alt="" />
-          <img className="flex-1 min-w-px h-full object-cover" src={`${BASE}/strip-3.webp`} alt="" />
-        </div>
-      </div>
+      {/* Commentary — caption left */}
+      <Caption side="left">
+        <p className="leading-[1.35]">
+          The goal was balance: stay consistent with the broader language while adapting it so it
+          still felt relevant to Outlook&apos;s users.
+        </p>
+      </Caption>
 
-      {/* Device on light bg (2/3) + Approach text (1/3) */}
-      <div className="flex gap-2 w-full" style={{ height: 620 }}>
-        <div
-          className="flex items-center justify-center h-full rounded-2xl overflow-hidden border border-gray-900"
-          style={{ flex: "744 1 0", background: "#e6e6e6" }}
-        >
-          <img className="object-contain" style={{ height: 450 }} src={`${BASE}/device.webp`} alt="" />
-        </div>
-        <TextBlock label="" align="bottom" className="self-end" style={{ flex: "368 1 0" }}>
-          <p className="leading-[1.35]">
-            Navigated technical constraints by developing scalable variants (3D, 2.5D, vector)
-            across surfaces and performance requirements.
-          </p>
-        </TextBlock>
-      </div>
+      {/* Full-width media */}
+      <img className="w-full aspect-[1120/580] rounded-2xl object-cover border border-gray-900" src={`${BASE}/wide-a.webp`} alt="" />
 
-      {/* Full-width images */}
-      <img className="w-full rounded-2xl border border-gray-900" src={`${BASE}/wide-1.webp`} alt="" />
-      <img className="w-full rounded-2xl border border-gray-900" src={`${BASE}/wide-2.webp`} alt="" />
+      {/* Commentary — caption right */}
+      <Caption side="right">
+        <p className="leading-[1.35]">
+          Different surfaces have different limits, so each illustration shipped in scalable variants,
+          full 3D, 2.5D, and vector, to fit the performance budget wherever it appeared.
+        </p>
+      </Caption>
 
-      {/* Outcome (2 col) + Credits (1 col) — fixed pair, 300px tall */}
+      {/* Full-width media — variant comparison */}
+      <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/variants.webp`} alt="" />
+
+      {/* Commentary — caption left */}
+      <Caption side="left">
+        <p className="leading-[1.35]">
+          Every illustration ran through the same pipeline: ideation, metaphor selection, CMF studies,
+          final selection, then production.
+        </p>
+      </Caption>
+
+      {/* Full-width media — process */}
+      <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/process.webp`} alt="" />
+
+      {/* Illustration library — light + dark grids */}
+      <img className="w-full aspect-[1120/232] rounded-2xl object-cover border border-gray-900" src={`${BASE}/grid-light.webp`} alt="" />
+      <img className="w-full aspect-[1120/232] rounded-2xl object-cover border border-gray-900" src={`${BASE}/grid-dark.webp`} alt="" />
+
+      {/* Outcome (2 col) + Credits / My contributions stack (1 col) — 300px tall */}
       <div className="flex gap-2 w-full" style={{ height: 300 }}>
-        <TextBlock label="Outcome" align="top" style={{ flex: "744 1 0" }}>
+        <TextBlock label="Outcome" style={{ flex: "744 1 0" }}>
           <p className="leading-[1.35]">
-            Produced and shipped 100+ illustrations across web, desktop, and mobile (light and dark
-            modes), replacing fragmented visuals with a unified, scalable system and establishing a
-            shared library and guidelines adopted across Outlook experiences.
+            Produced and shipped 100+ illustrations across web, desktop, and mobile, in both light and
+            dark.
+          </p>
+          <p className="leading-[1.35]">
+            They replaced a patchwork of one-off visuals with a single system, a shared library and
+            guidelines now used across Outlook.
           </p>
         </TextBlock>
-        <TextBlock label="Credits" align="top" style={{ flex: "368 1 0" }}>
-          <p className="leading-[1.35]">
-            Alexis Copeland, Tati Astua, Yulia M, Horacio G, Pedro Leitin, BUCK Design, Christina
-            Ergonis, Coin Moll
-          </p>
-        </TextBlock>
+        <div className="flex flex-col gap-2 h-full" style={{ flex: "368 1 0" }}>
+          <TextBlock label="Credits" className="flex-1">
+            <p className="leading-[1.35]">
+              Alexis Copeland, Tati Astua, Yulia M, Horacio G, Pedro Leitin, BUCK Design, Christina
+              Ergonis, Coin Moll
+            </p>
+          </TextBlock>
+          <TextBlock label="My contributions">
+            <p className="leading-[1.35]">
+              Product evangelism &amp; integration, Art &amp; creative direction, Visual production
+            </p>
+          </TextBlock>
+        </div>
       </div>
     </div>
   );
