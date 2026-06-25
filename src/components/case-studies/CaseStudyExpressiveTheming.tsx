@@ -121,6 +121,14 @@ function ThemeShowcase() {
   const src = mode === "light" ? option.previewLight ?? option.preview : option.preview;
   const placeholder = theme === "image" ? option.thumb : theme === "pride" ? PRIDE_PLACEHOLDER : undefined;
 
+  // Controller palette per mode (Figma 706:891 dark / 706:892 light)
+  const ui =
+    mode === "dark"
+      ? { pill: "#1a1a1a", activeBg: "#0d0d0d", activeText: "#e6e6e6", toggleBg: "#b3b3b3", toggleIcon: "#1a1a1a", border: "#e6e6e6" }
+      : { pill: "#e6e6e6", activeBg: "#b3b3b3", activeText: "#1a1a1a", toggleBg: "#1a1a1a", toggleIcon: "#e6e6e6", border: "#1a1a1a" };
+  const hoverText = mode === "dark" ? "hover:text-[#b3b3b3]" : "hover:text-[#4d4d4d]";
+  const restOpacity = mode === "dark" ? "opacity-30 hover:opacity-70" : "opacity-50 hover:opacity-70";
+
   const pick = (v: string) => setSel((s) => ({ ...s, [theme]: v }));
 
   return (
@@ -141,7 +149,7 @@ function ThemeShowcase() {
       {/* tab controller — bottom-left overlay, 10px inset */}
       <div className="absolute flex gap-2 items-center z-10" style={{ left: 10, bottom: 10 }}>
         {/* theme tabs */}
-        <div className="flex gap-1 items-center rounded-full" style={{ background: "#1a1a1a", padding: 4 }}>
+        <div className="flex gap-1 items-center rounded-full" style={{ background: ui.pill, padding: 4 }}>
           {TABS.map((t) => {
             const active = t.value === theme;
             return (
@@ -149,7 +157,7 @@ function ThemeShowcase() {
                 key={t.value}
                 onClick={() => setTheme(t.value)}
                 className={`rounded-full transition-colors cursor-pointer leading-[1.35] whitespace-nowrap ${
-                  active ? "text-[#e6e6e6]" : "text-[#808080] hover:text-[#b3b3b3]"
+                  active ? "" : `text-[#808080] ${hoverText}`
                 }`}
                 style={{
                   paddingTop: 4,
@@ -158,7 +166,8 @@ function ThemeShowcase() {
                   paddingRight: 16,
                   fontSize: "1rem",
                   letterSpacing: "-0.16px",
-                  background: active ? "#0d0d0d" : "transparent",
+                  background: active ? ui.activeBg : "transparent",
+                  color: active ? ui.activeText : undefined,
                 }}
               >
                 {t.label}
@@ -170,10 +179,10 @@ function ThemeShowcase() {
             onClick={() => setMode((m) => (m === "dark" ? "light" : "dark"))}
             className="flex items-center justify-center rounded-full cursor-pointer transition-colors shrink-0"
             style={{
-              background: mode === "dark" ? "#b3b3b3" : "#0d0d0d",
+              background: ui.toggleBg,
               width: 29,
               height: 29,
-              color: mode === "dark" ? "#1a1a1a" : "#e6e6e6",
+              color: ui.toggleIcon,
             }}
             aria-label={mode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
           >
@@ -186,7 +195,7 @@ function ThemeShowcase() {
           <TooltipProvider>
             <div
               className="flex gap-1 items-center"
-              style={{ background: "#1a1a1a", padding: 4, borderRadius: tab.radius }}
+              style={{ background: ui.pill, padding: 4, borderRadius: tab.radius }}
             >
               {tab.options.map((o) => {
                 const active = o.value === selValue;
@@ -197,7 +206,7 @@ function ThemeShowcase() {
                         <button
                           onClick={() => pick(o.value)}
                           className={`cursor-pointer overflow-hidden bg-cover bg-center transition-opacity ${
-                            active ? "opacity-100" : "opacity-30 hover:opacity-70"
+                            active ? "opacity-100" : restOpacity
                           }`}
                           aria-label={o.label}
                           style={{
@@ -206,7 +215,7 @@ function ThemeShowcase() {
                             borderRadius: 7,
                             background: o.swatch ?? o.gradient ?? undefined,
                             backgroundImage: o.thumb ? `url(${o.thumb})` : o.gradient,
-                            border: active ? "2px solid #e6e6e6" : "2px solid transparent",
+                            border: active ? `2px solid ${ui.border}` : "2px solid transparent",
                           }}
                         />
                       }

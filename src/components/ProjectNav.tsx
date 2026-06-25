@@ -33,7 +33,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
                 >
                   {p.title}
                 </p>
-                <div className="flex gap-[16px] items-center justify-end shrink-0">
+                <div className="flex gap-[8px] items-center justify-end shrink-0">
                   <span
                     className="leading-[1.35] whitespace-nowrap"
                     style={{ color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" }}
@@ -45,7 +45,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
                       src={group.logoUrl}
                       alt={group.company}
                       className="object-contain shrink-0"
-                      style={{ width: 20, height: 20 }}
+                      style={{ width: 16, height: 16 }}
                     />
                   )}
                 </div>
