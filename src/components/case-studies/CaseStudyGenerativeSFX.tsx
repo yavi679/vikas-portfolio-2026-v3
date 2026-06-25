@@ -38,6 +38,36 @@ function TextBlock({
   );
 }
 
+/* A half-width caption pinned to one side; width matches a full-width media's
+   half exactly: (100% - 8px gap) / 2. */
+function Caption({
+  side,
+  label,
+  children,
+}: {
+  side: "left" | "right";
+  label?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex w-full" style={{ justifyContent: side === "left" ? "flex-start" : "flex-end" }}>
+      <TextBlock label={label} style={{ width: "calc(50% - 4px)" }}>
+        {children}
+      </TextBlock>
+    </div>
+  );
+}
+
+/* A feature note: muted gray name + bullet, then the description in body color. */
+function Feat({ name, children }: { name: string; children: React.ReactNode }) {
+  return (
+    <p className="leading-[1.35]">
+      <span style={{ color: "#808080" }}>{name} • </span>
+      {children}
+    </p>
+  );
+}
+
 /* A showcase card: dark canvas with a centered screenshot floated on it. */
 function Showcase({
   src,
@@ -83,62 +113,56 @@ export default function CaseStudyGenerativeSFX() {
       {/* Hero */}
       <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/hero.webp`} alt="" />
 
-      {/* Problem — text left (2 col) */}
-      <div className="flex gap-2 w-full items-start">
-        <TextBlock label="Problem" style={{ flex: "744 1 0" }}>
-          <p className="leading-[1.35]">
-            Sound generation stopped at prompt in, audio out. It ignored the things that make sound
-            land on video: timing, motion, and intent. And there was no obvious home for it, no form
-            factor for where generative audio should live next to a video.
-          </p>
-        </TextBlock>
-        <div style={{ flex: "368 1 0" }} />
-      </div>
+      {/* Problem — caption left */}
+      <Caption side="left" label="Problem">
+        <p className="leading-[1.35]">
+          Sound generation stopped at prompt in, audio out. It ignored the things that make sound land
+          on video: timing, motion, and intent. And there was no obvious home for it, no form factor
+          for where generative audio should live next to a video.
+        </p>
+      </Caption>
 
       {/* Full-width editor */}
       <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/editor-full.webp`} alt="" />
 
-      {/* Approach — text right (2 col) */}
-      <div className="flex gap-2 w-full items-start">
-        <div style={{ flex: "368 1 0" }} />
-        <TextBlock label="Approach" style={{ flex: "744 1 0" }}>
-          <p className="leading-[1.35]">
-            I started from the creator, not the model. Sound isn&apos;t something you describe once,
-            it&apos;s something you perform against picture. So I built the tool around placing and
-            timing sound in context, with a lightweight timeline for dropping, snapping, and reworking
-            cues.
-          </p>
-          <p className="leading-[1.35]">
-            That meant drawing hard lines. No full DAW, capped tracks, capped duration. Every cut kept
-            the tool fast and easy to pick up, which matters more than power for a first release.
-          </p>
-        </TextBlock>
+      {/* Approach — caption right */}
+      <Caption side="right" label="Approach">
+        <p className="leading-[1.35]">
+          I started from the creator, not the model. Sound isn&apos;t something you describe once,
+          it&apos;s something you perform against picture. So I built the tool around placing and
+          timing sound in context, with a lightweight timeline for dropping, snapping, and reworking
+          cues.
+        </p>
+        <p className="leading-[1.35]">
+          That meant drawing hard lines. No full DAW, capped tracks, capped duration. Every cut kept
+          the tool fast and easy to pick up, which matters more than power for a first release.
+        </p>
+      </Caption>
+
+      {/* Lightweight generative timeline — caption left */}
+      <Caption side="left">
+        <Feat name="Lightweight generative timeline">
+          A familiar, linear workspace. The opinionated layout makes generative results feel arranged
+          and intentional, not like a pile of clips.
+        </Feat>
+      </Caption>
+
+      {/* Timeline showcase — full-width */}
+      <div className="w-full aspect-video">
+        <Showcase src={`${BASE}/timeline.webp`} maxH={450} maxW="65%" className="w-full" />
       </div>
 
-      {/* Row — caption left + showcase right */}
-      <div className="flex gap-2 w-full" style={{ height: 630 }}>
-        <TextBlock label="Automatic video analysis" className="self-start" style={{ flex: "368 1 0" }}>
-          <p className="leading-[1.35]">
-            The tool reads your footage and builds a starting comp plus a matched library of effects,
-            so you open onto cues already on the timeline, not a blank one.
-          </p>
-        </TextBlock>
-        <div style={{ flex: "744 1 0" }} className="h-full">
-          <Showcase src={`${BASE}/analysis.webp`} maxH={450} className="w-full" />
-        </div>
-      </div>
+      {/* Automatic video analysis — caption right */}
+      <Caption side="right">
+        <Feat name="Automatic video analysis">
+          The tool reads your footage and builds a starting comp plus a matched library of effects, so
+          you open onto cues already on the timeline, not a blank one.
+        </Feat>
+      </Caption>
 
-      {/* Row — showcase left + caption right (bottom) */}
-      <div className="flex gap-2 w-full" style={{ height: 630 }}>
-        <div style={{ flex: "744 1 0" }} className="h-full">
-          <Showcase src={`${BASE}/timeline.webp`} maxH={404} className="w-full" />
-        </div>
-        <TextBlock label="Lightweight generative timeline" align="bottom" className="self-end" style={{ flex: "368 1 0" }}>
-          <p className="leading-[1.35]">
-            A familiar, linear workspace. The opinionated layout makes generative results feel arranged
-            and intentional, not like a pile of clips.
-          </p>
-        </TextBlock>
+      {/* Analysis showcase — full-width */}
+      <div className="w-full aspect-video">
+        <Showcase src={`${BASE}/analysis.webp`} maxH={498} maxW="65%" className="w-full" />
       </div>
 
       {/* Row — three social posts with reach */}
@@ -167,7 +191,7 @@ export default function CaseStudyGenerativeSFX() {
             </p>
           </TextBlock>
           <TextBlock label="My contributions">
-            <p className="leading-[1.35]">Web &amp; mobile web UX, Interaction design, Creative direction</p>
+            <p className="leading-[1.35]">Web &amp; mobile web UX, Interaction design, Creative production</p>
           </TextBlock>
         </div>
       </div>
