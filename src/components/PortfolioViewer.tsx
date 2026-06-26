@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { getAllProjects } from "@/lib/projects";
 import ProjectNav from "@/components/ProjectNav";
 import CaseStudy3DIllustrations from "@/components/case-studies/CaseStudy3DIllustrations";
@@ -24,6 +24,12 @@ export default function PortfolioViewer() {
   const [selectedId, setSelectedId] = useState("3d-illustrations");
   const current = allProjects.find((p) => p.id === selectedId);
   const CaseStudy = caseStudies[selectedId];
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Always start a project at the top, even when returning to one viewed before.
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [selectedId]);
 
   return (
     <div className="h-screen w-screen overflow-hidden flex gap-2 p-2" style={{ background: "#0a0a0a" }}>
@@ -33,19 +39,22 @@ export default function PortfolioViewer() {
       </div>
 
       {/* Columns 2–4 — scrolling case study */}
-      <div className="flex-1 h-full overflow-y-auto">
-        {CaseStudy ? (
-          <CaseStudy />
-        ) : (
-          <div
-            className="w-full flex items-center justify-center rounded-2xl"
-            style={{ background: "#1a1a1a", minHeight: "100%" }}
-          >
-            <p className="leading-[1.35]" style={{ color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" }}>
-              {current?.title} — case study coming soon.
-            </p>
-          </div>
-        )}
+      <div ref={scrollRef} className="flex-1 h-full overflow-y-auto">
+        {/* key re-mounts on switch → scroll resets cleanly and the enter anim replays */}
+        <div key={selectedId} className="case-enter">
+          {CaseStudy ? (
+            <CaseStudy />
+          ) : (
+            <div
+              className="w-full flex items-center justify-center rounded-2xl"
+              style={{ background: "#1a1a1a", minHeight: "100%" }}
+            >
+              <p className="leading-[1.35]" style={{ color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" }}>
+                {current?.title} — case study coming soon.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

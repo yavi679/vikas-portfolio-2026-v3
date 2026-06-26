@@ -79,30 +79,35 @@ function FullWidth({
   );
 }
 
-/* The "templates as apps" panel — three depth layers (large template screens +
-   a field of phone mockups) stacked with a lighten blend and floated at
-   different phases for a gentle parallax. Recreated from the Figma Lottie. */
+/* The "templates as apps" panel — three rows of template cards on a 30°-rotated
+   stage, scrolling horizontally as opposing lanes (row1/row3 one way, row2 the
+   other) for an angled "traffic" flow. Recreated from the Webflow Lottie:
+   each row is two copies of its strip, so a translate of one strip-width loops
+   seamlessly. */
 function AnimatedPanel() {
-  const layers = [
-    { src: `${BASE}/panel-1a.webp`, cls: "st-float-a", anim: "stFloatA 9s" },
-    { src: `${BASE}/panel-1b.webp`, cls: "st-float-b", anim: "stFloatB 11s" },
-    { src: `${BASE}/panel-1c.webp`, cls: "st-float-c", anim: "stFloatC 8s" },
+  // top → bottom, with direction + speed mirroring the original (row3 fastest)
+  const rows = [
+    { src: `${BASE}/panel-row-3.webp`, dir: "R", dur: 39, top: "15%", h: "24%" },
+    { src: `${BASE}/panel-row-2.webp`, dir: "L", dur: 60, top: "39.5%", h: "21%" },
+    { src: `${BASE}/panel-row-1.webp`, dir: "R", dur: 48, top: "61%", h: "24%" },
   ];
   return (
     <div
       className="relative w-full aspect-video rounded-2xl overflow-hidden border border-gray-900"
       style={{ background: "#1a1a1a" }}
     >
-      {layers.map((l) => (
-        <img
-          key={l.src}
-          src={l.src}
-          alt=""
-          aria-hidden
-          className={`absolute inset-0 w-full h-full object-cover ${l.cls}`}
-          style={{ mixBlendMode: "lighten", animation: `${l.anim} ease-in-out infinite`, willChange: "transform" }}
-        />
-      ))}
+      <div className="absolute" style={{ inset: "-50%", transform: "rotate(30deg)", transformOrigin: "center" }}>
+        {rows.map((r) => (
+          <div
+            key={r.src}
+            className="st-row absolute left-0 flex"
+            style={{ top: r.top, height: r.h, animation: `stTraffic${r.dir} ${r.dur}s linear infinite`, willChange: "transform" }}
+          >
+            <img src={r.src} alt="" aria-hidden className="h-full w-auto max-w-none shrink-0" />
+            <img src={r.src} alt="" aria-hidden className="h-full w-auto max-w-none shrink-0" />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

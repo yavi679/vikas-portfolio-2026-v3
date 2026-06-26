@@ -135,19 +135,20 @@
 }
 /* overscroll bg fix */
 
-/* Smart Templates — floating panel parallax (3 layers, lighten-blended) */
-@keyframes stFloatA {
-  0%, 100% { transform: scale(1.1) translate(-1.6%, -1.1%); }
-  50%      { transform: scale(1.1) translate(1.6%, 2%); }
-}
-@keyframes stFloatB {
-  0%, 100% { transform: scale(1.1) translate(1.9%, 1.5%); }
-  50%      { transform: scale(1.1) translate(-1.7%, -1.9%); }
-}
-@keyframes stFloatC {
-  0%, 100% { transform: scale(1.1) translate(-1.3%, 1.7%); }
-  50%      { transform: scale(1.1) translate(1.5%, -1.5%); }
-}
+/* Smart Templates — angled "traffic" marquee (3 rows; two copies each, so a
+   translate of one strip width loops seamlessly). Right vs left = opposite lanes. */
+@keyframes stTrafficR { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@keyframes stTrafficL { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
-  .st-float-a, .st-float-b, .st-float-c { animation: none !important; }
+  .st-row { animation: none !important; }
+}
+
+/* Case-study enter transition (re-runs on each project switch via key) */
+@keyframes caseEnter {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.case-enter { animation: caseEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .case-enter { animation: none; }
 }

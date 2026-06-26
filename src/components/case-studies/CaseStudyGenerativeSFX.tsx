@@ -111,7 +111,16 @@ export default function CaseStudyGenerativeSFX() {
   return (
     <div className="flex flex-col gap-2 items-center w-full">
       {/* Hero */}
-      <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/hero.webp`} alt="" />
+      <div className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>
+        <video
+          className="w-full h-full object-cover"
+          src="/projects/generative-sfx/01-Generative-sound-effects.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      </div>
 
       {/* Problem — caption left */}
       <Caption side="left" label="Problem">
