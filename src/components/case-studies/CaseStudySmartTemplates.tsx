@@ -79,6 +79,34 @@ function FullWidth({
   );
 }
 
+/* The "templates as apps" panel — three depth layers (large template screens +
+   a field of phone mockups) stacked with a lighten blend and floated at
+   different phases for a gentle parallax. Recreated from the Figma Lottie. */
+function AnimatedPanel() {
+  const layers = [
+    { src: `${BASE}/panel-1a.webp`, cls: "st-float-a", anim: "stFloatA 9s" },
+    { src: `${BASE}/panel-1b.webp`, cls: "st-float-b", anim: "stFloatB 11s" },
+    { src: `${BASE}/panel-1c.webp`, cls: "st-float-c", anim: "stFloatC 8s" },
+  ];
+  return (
+    <div
+      className="relative w-full aspect-video rounded-2xl overflow-hidden border border-gray-900"
+      style={{ background: "#1a1a1a" }}
+    >
+      {layers.map((l) => (
+        <img
+          key={l.src}
+          src={l.src}
+          alt=""
+          aria-hidden
+          className={`absolute inset-0 w-full h-full object-cover ${l.cls}`}
+          style={{ mixBlendMode: "lighten", animation: `${l.anim} ease-in-out infinite`, willChange: "transform" }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function CaseStudySmartTemplates() {
   return (
     <div className="flex flex-col gap-2 items-center w-full">
@@ -118,8 +146,8 @@ export default function CaseStudySmartTemplates() {
         </p>
       </Caption>
 
-      {/* Full-width panel */}
-      <FullWidth src={`${BASE}/panel-1.webp`} aspect="1120/575" />
+      {/* Templates-as-apps — animated floating panels */}
+      <AnimatedPanel />
 
       {/* Commentary — caption left (cross-platform) */}
       <Caption side="left">

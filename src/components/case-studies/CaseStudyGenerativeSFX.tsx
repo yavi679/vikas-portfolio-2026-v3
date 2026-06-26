@@ -86,7 +86,7 @@ function Showcase({
 }) {
   return (
     <div
-      className={`relative flex h-full items-center justify-center rounded-2xl overflow-hidden border border-gray-900 ${className}`}
+      className={`flex h-full flex-col items-center justify-center gap-3 rounded-2xl overflow-hidden border border-gray-900 ${className}`}
       style={{ background: "#1a1a1a", ...style }}
     >
       <img
@@ -97,8 +97,8 @@ function Showcase({
       />
       {caption && (
         <p
-          className="absolute leading-[1.35] whitespace-nowrap"
-          style={{ bottom: 44, color: "#808080", fontSize: "0.71rem", letterSpacing: "-0.2px" }}
+          className="leading-[1.35] whitespace-nowrap"
+          style={{ color: "#808080", fontSize: "0.71rem", letterSpacing: "-0.2px" }}
         >
           {caption}
         </p>
@@ -166,7 +166,7 @@ export default function CaseStudyGenerativeSFX() {
       </div>
 
       {/* Row — three social posts with reach */}
-      <div className="flex gap-2 w-full" style={{ height: 620 }}>
+      <div className="flex gap-2 w-full" style={{ height: 480 }}>
         <Showcase src={`${BASE}/post-1.webp`} maxH={400} maxW="62%" caption="9.1M Views" className="flex-1 min-w-px" />
         <Showcase src={`${BASE}/post-2.webp`} maxH={400} maxW="62%" caption="3.5M Views" className="flex-1 min-w-px" />
         <Showcase src={`${BASE}/post-3.webp`} maxH={400} maxW="62%" caption="1.4M Views" className="flex-1 min-w-px" />
@@ -174,7 +174,8 @@ export default function CaseStudyGenerativeSFX() {
 
       {/* Outcome (2 col) + Credits / My contributions stack (1 col) — 300px tall */}
       <div className="flex gap-2 w-full" style={{ height: 300 }}>
-        <TextBlock label="Outcome" style={{ flex: "744 1 0" }}>
+        {/* widths = 2 and 1 of the posts row's 3 columns, so the gutter aligns */}
+        <TextBlock label="Outcome" className="shrink-0" style={{ width: "calc((100% - 16px) / 3 * 2 + 8px)" }}>
           <p className="leading-[1.35]">
             Shipped a generative SFX editor on desktop and mobile web, letting creators score sound
             directly onto video.
@@ -184,7 +185,7 @@ export default function CaseStudyGenerativeSFX() {
             priorities across Express and Premiere.
           </p>
         </TextBlock>
-        <div className="flex flex-col gap-2 h-full" style={{ flex: "368 1 0" }}>
+        <div className="flex flex-col gap-2 h-full shrink-0" style={{ width: "calc((100% - 16px) / 3)" }}>
           <TextBlock label="Credits" className="flex-1">
             <p className="leading-[1.35]">
               Justin Salomon, Prannoy Mittal, Rahul Gupta, Eshani Pendsey, Sarah Shen, Oriol Nieto
