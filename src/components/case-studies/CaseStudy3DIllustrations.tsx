@@ -7,6 +7,8 @@
    voice (see VOICE.md). The Figma hero is an empty placeholder, so the existing
    hero reel is kept. */
 
+import VideoHero from "@/components/VideoHero";
+
 const BASE = "/projects/3d-illustrations/case-study";
 
 const LABEL = { color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" } as const;
@@ -65,17 +67,8 @@ function Caption({
 export default function CaseStudy3DIllustrations() {
   return (
     <div className="flex flex-col gap-2 items-center w-full">
-      {/* Hero */}
-      <div className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>
-        <video
-          className="w-full h-full object-cover"
-          src="/projects/3d-illustrations/01-3D-Illustrations.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-      </div>
+      {/* Hero — mute control enabled once the reel's audio is restored */}
+      <VideoHero src="/projects/3d-illustrations/01-3D-Illustrations.mp4" hasAudio={false} />
 
       {/* Problem — caption left */}
       <Caption side="left" label="Problem">

@@ -3,6 +3,8 @@
 /* Based on Figma node 676:1126 — "Generative SFX" case study.
    Copy written in portfolio voice (see VOICE.md). */
 
+import VideoHero from "@/components/VideoHero";
+
 const BASE = "/projects/generative-sfx/case-study";
 
 const LABEL = { color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" } as const;
@@ -111,16 +113,7 @@ export default function CaseStudyGenerativeSFX() {
   return (
     <div className="flex flex-col gap-2 items-center w-full">
       {/* Hero */}
-      <div className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>
-        <video
-          className="w-full h-full object-cover"
-          src="/projects/generative-sfx/01-Generative-sound-effects.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-      </div>
+      <VideoHero src="/projects/generative-sfx/01-Generative-sound-effects.mp4" />
 
       {/* Problem — caption left */}
       <Caption side="left" label="Problem">

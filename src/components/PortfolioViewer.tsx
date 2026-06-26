@@ -40,8 +40,12 @@ export default function PortfolioViewer() {
 
       {/* Columns 2–4 — scrolling case study */}
       <div ref={scrollRef} className="flex-1 h-full overflow-y-auto">
-        {/* key re-mounts on switch → scroll resets cleanly and the enter anim replays */}
-        <div key={selectedId} className="case-enter">
+        {/* key re-mounts on switch → scroll resets and the enter animation replays.
+            tw-animate-css utilities (shadcn convention); disabled for reduced motion. */}
+        <div
+          key={selectedId}
+          className="animate-in fade-in-0 slide-in-from-bottom-[40px] duration-500 ease-out motion-reduce:animate-none"
+        >
           {CaseStudy ? (
             <CaseStudy />
           ) : (
