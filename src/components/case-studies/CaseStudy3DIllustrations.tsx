@@ -67,8 +67,8 @@ function Caption({
 export default function CaseStudy3DIllustrations() {
   return (
     <div className="flex flex-col gap-2 items-center w-full">
-      {/* Hero — mute control enabled once the reel's audio is restored */}
-      <VideoHero src="/projects/3d-illustrations/01-3D-Illustrations.mp4" hasAudio={false} />
+      {/* Hero */}
+      <VideoHero src="/projects/3d-illustrations/01-3D-Illustrations.mp4" />
 
       {/* Problem — caption left */}
       <Caption side="left" label="Problem">
