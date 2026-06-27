@@ -124,8 +124,8 @@ export default function CaseStudyGenerativeSFX() {
         </p>
       </Caption>
 
-      {/* Full-width editor */}
-      <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/editor-full.webp`} alt="" />
+      {/* Full-width editor overview */}
+      <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/shot-1.webp`} alt="" />
 
       {/* Approach — caption right */}
       <Caption side="right" label="Approach">
@@ -149,10 +149,8 @@ export default function CaseStudyGenerativeSFX() {
         </Feat>
       </Caption>
 
-      {/* Timeline showcase — full-width */}
-      <div className="w-full aspect-video">
-        <Showcase src={`${BASE}/timeline.webp`} maxH={450} maxW="65%" className="w-full" />
-      </div>
+      {/* Timeline — full-width */}
+      <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/shot-2.webp`} alt="" />
 
       {/* Automatic video analysis — caption right */}
       <Caption side="right">
@@ -162,10 +160,8 @@ export default function CaseStudyGenerativeSFX() {
         </Feat>
       </Caption>
 
-      {/* Analysis showcase — full-width */}
-      <div className="w-full aspect-video">
-        <Showcase src={`${BASE}/analysis.webp`} maxH={498} maxW="65%" className="w-full" />
-      </div>
+      {/* Analysis — full-width */}
+      <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/shot-3.webp`} alt="" />
 
       {/* Row — three social posts with reach */}
       <div className="flex gap-2 w-full" style={{ height: 480 }}>
@@ -173,6 +169,9 @@ export default function CaseStudyGenerativeSFX() {
         <Showcase src={`${BASE}/post-2.webp`} maxH={400} maxW="62%" caption="3.5M Views" className="flex-1 min-w-px" />
         <Showcase src={`${BASE}/post-3.webp`} maxH={400} maxW="62%" caption="1.4M Views" className="flex-1 min-w-px" />
       </div>
+
+      {/* Full-width — editor across surfaces */}
+      <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/shot-4.webp`} alt="" />
 
       {/* Outcome (2 col) + Credits / My contributions stack (1 col) — 300px tall */}
       <div className="flex gap-2 w-full" style={{ height: 300 }}>

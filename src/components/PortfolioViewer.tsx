@@ -8,9 +8,11 @@ import CaseStudyExpressiveTheming from "@/components/case-studies/CaseStudyExpre
 import CaseStudySmartTemplates from "@/components/case-studies/CaseStudySmartTemplates";
 import CaseStudyUXRedesigns from "@/components/case-studies/CaseStudyUXRedesigns";
 import CaseStudyGenerativeSFX from "@/components/case-studies/CaseStudyGenerativeSFX";
+import CaseStudyGenerativeSpeech from "@/components/case-studies/CaseStudyGenerativeSpeech";
 
 const caseStudies: Record<string, React.ComponentType> = {
   "generative-sfx": CaseStudyGenerativeSFX,
+  "generative-speech": CaseStudyGenerativeSpeech,
   "3d-illustrations": CaseStudy3DIllustrations,
   "expressive-theming": CaseStudyExpressiveTheming,
   "smart-templates": CaseStudySmartTemplates,
