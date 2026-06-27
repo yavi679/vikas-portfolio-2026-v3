@@ -19,11 +19,10 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
           <button
             key={p.id}
             onClick={() => onSelect(p.id)}
-            className="flex items-center text-left rounded-2xl transition-colors duration-150 cursor-pointer"
-            style={{
-              padding: 16,
-              background: active ? "#262626" : "#1a1a1a",
-            }}
+            className={`flex items-center text-left rounded-2xl transition-colors duration-150 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/60 ${
+              active ? "bg-[#262626]" : "hover:bg-[#1a1a1a]"
+            }`}
+            style={{ padding: 16 }}
           >
             <div className="flex flex-1 flex-col gap-2 min-w-px">
               <div className="flex gap-2 items-start w-full">

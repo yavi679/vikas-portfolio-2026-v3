@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { VolumeX, Volume2 } from "lucide-react";
 
 function fmt(t: number) {
@@ -33,6 +33,21 @@ export default function VideoHero({
     if (!next) v.volume = 1;
     setMuted(next);
   };
+
+  // "M" hotkey toggles mute (only one hero is mounted at a time).
+  useEffect(() => {
+    if (!hasAudio) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey || e.repeat) return;
+      if (e.key.toLowerCase() !== "m") return;
+      const el = document.activeElement as HTMLElement | null;
+      if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable)) return;
+      toggle();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasAudio]);
 
   return (
     <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>

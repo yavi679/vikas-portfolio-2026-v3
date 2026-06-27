@@ -30,7 +30,7 @@ function TextBlock({
   return (
     <div
       className={`flex flex-col gap-2 rounded-2xl ${align === "bottom" ? "justify-end" : "justify-start"} ${className}`}
-      style={{ background: "#1a1a1a", padding: 16, ...style }}
+      style={{ background: "transparent", padding: 16, ...style }}
     >
       {label && (
         <p className="leading-[1.35] whitespace-nowrap" style={LABEL}>
