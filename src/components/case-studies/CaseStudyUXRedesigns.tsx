@@ -1,74 +1,11 @@
 "use client";
 
 /* Based on Figma node 676:1331 — "UX Redesigns" case study (refined layout).
-   Captions are half-width (556) blocks that alternate left/right and bracket
-   full-width image pairs. Copy is written in portfolio voice (see VOICE.md). */
+   Copy is written in portfolio voice (see VOICE.md). */
+
+import { MarginRow, Feat, CreditsRow } from "./blocks";
 
 const BASE = "/projects/ux-redesigns/case-study";
-
-const LABEL = { color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" } as const;
-const BODY = { color: "#e6e6e6", fontSize: "1rem", letterSpacing: "-0.16px" } as const;
-
-function TextBlock({
-  label,
-  children,
-  align = "top",
-  className = "",
-  style,
-}: {
-  label?: string;
-  children: React.ReactNode;
-  align?: "top" | "bottom";
-  className?: string;
-  style?: React.CSSProperties;
-}) {
-  return (
-    <div
-      className={`flex flex-col gap-2 rounded-2xl ${align === "bottom" ? "justify-end" : "justify-start"} ${className}`}
-      style={{ background: "transparent", padding: 16, ...style }}
-    >
-      {label && (
-        <p className="leading-[1.35] whitespace-nowrap" style={LABEL}>
-          {label}
-        </p>
-      )}
-      <div className="flex flex-col gap-2 leading-[1.35]" style={BODY}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-/* A single half-width caption pinned to one side, the other half left open.
-   Feature captions omit the label and inline the feature name in the body. */
-function Caption({
-  side,
-  label,
-  children,
-}: {
-  side: "left" | "right";
-  label?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex w-full" style={{ justifyContent: side === "left" ? "flex-start" : "flex-end" }}>
-      {/* width matches a media pair card exactly: (100% - 8px gap) / 2 */}
-      <TextBlock label={label} style={{ width: "calc(50% - 4px)" }}>
-        {children}
-      </TextBlock>
-    </div>
-  );
-}
-
-/* A feature note: muted gray name + bullet, then the description in body color. */
-function Feat({ name, children }: { name: string; children: React.ReactNode }) {
-  return (
-    <p className="leading-[1.35]">
-      <span style={{ color: "#808080" }}>{name} • </span>
-      {children}
-    </p>
-  );
-}
 
 /* Full-bleed media on a white canvas, fully visible (object-contain) so panels
    aren't cropped. Renders <video> for .mp4 sources, <img> otherwise. */
@@ -107,45 +44,45 @@ export default function CaseStudyUXRedesigns() {
         />
       </div>
 
-      {/* Problem — caption left (half) */}
-      <Caption side="left" label="Problem">
+      {/* Problem — margin label + right column */}
+      <MarginRow label="Problem">
         <p className="leading-[1.35]">
           As Excel moved to the web, its interaction model needed to catch up. It had to feel modern
           and hold its own against tools like Google Sheets. The core moves, sorting, filtering, and
           shortcuts, were powerful but dense. They came straight over from desktop without adapting to
           the web, and all that complexity made Excel feel daunting, especially for newer users.
         </p>
-      </Caption>
+      </MarginRow>
 
       {/* Full-width image — isometric */}
       <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/wide-1.webp`} alt="" />
 
-      {/* Quick commits — caption left */}
-      <Caption side="left">
+      {/* Quick commits — right column */}
+      <MarginRow>
         <Feat name="Quick commits">
           You can commit a shortcut straight from the panel, not just look it up. Handy when reaching
           for a key combo isn&apos;t easy.
         </Feat>
-      </Caption>
+      </MarginRow>
 
       {/* Pair — Quick commits + Browser overrides */}
       <Pair a={`${BASE}/pair1-a.mp4`} b={`${BASE}/pair1-b.mp4`} height={500} />
 
-      {/* Browser overrides — caption right */}
-      <Caption side="right">
+      {/* Browser overrides — right column */}
+      <MarginRow>
         <Feat name="Browser overrides">
           Color flags when Excel overrides a browser shortcut, and hovering shows exactly which one it
           replaced.
         </Feat>
-      </Caption>
+      </MarginRow>
 
-      {/* Sort or filter by cell color — caption left */}
-      <Caption side="left">
+      {/* Sort or filter by cell color — right column */}
+      <MarginRow>
         <Feat name="Sort or filter by cell color">
           Each color you pick jumps to the front of the tray in the order you chose. Tooltips tie a
           color back to the values behind it.
         </Feat>
-      </Caption>
+      </MarginRow>
 
       {/* Full-width video — sort/filter by color */}
       <video
@@ -157,32 +94,32 @@ export default function CaseStudyUXRedesigns() {
         playsInline
       />
 
-      {/* Share shortcuts — caption right */}
-      <Caption side="right">
+      {/* Share shortcuts — right column */}
+      <MarginRow>
         <Feat name="Share shortcuts">
           No more sticky notes. People can save, curate, and share their favorite shortcuts to speed up
           their own and their team&apos;s workflows.
         </Feat>
-      </Caption>
+      </MarginRow>
 
       {/* Pair — Search + Share */}
       <Pair a={`${BASE}/pair2-a.webp`} b={`${BASE}/pair2-b.webp`} height={630} />
 
-      {/* Search in natural language — caption left */}
-      <Caption side="left">
+      {/* Search in natural language — right column */}
+      <MarginRow>
         <Feat name="Search in natural language">
           Natural language is spreading across Excel, so I brought it in search too. You can find a
           shortcut just by describing what you want to do.
         </Feat>
-      </Caption>
+      </MarginRow>
 
-      {/* Sort/filter by number — caption left */}
-      <Caption side="left">
+      {/* Sort/filter by number — right column */}
+      <MarginRow>
         <Feat name="Sort/filter by number">
           Pick an operator and it drops straight into the input, or just type to edit it inline without
           moving your cursor. The field confirms whether each change took.
         </Feat>
-      </Caption>
+      </MarginRow>
 
       {/* Full-width video — sort/filter by number */}
       <video
@@ -194,42 +131,38 @@ export default function CaseStudyUXRedesigns() {
         playsInline
       />
 
-      {/* Max mode + Onboarding — two captions side by side */}
-      <div className="flex gap-2 w-full items-start">
-        <TextBlock className="min-w-px" style={{ flex: "556 1 0" }}>
-          <Feat name="Max mode">
-            A denser, power-user view that keeps every shortcut within reach for people who live in the
-            keyboard.
-          </Feat>
-        </TextBlock>
-        <TextBlock className="min-w-px" style={{ flex: "556 1 0" }}>
-          <Feat name="Onboarding">
-            A light first run that introduces the new shortcut system without getting in the way.
-          </Feat>
-        </TextBlock>
-      </div>
+      {/* Max mode — right column */}
+      <MarginRow>
+        <Feat name="Max mode">
+          A denser, power-user view that keeps every shortcut within reach for people who live in the
+          keyboard.
+        </Feat>
+      </MarginRow>
+
+      {/* Onboarding — right column */}
+      <MarginRow>
+        <Feat name="Onboarding">
+          A light first run that introduces the new shortcut system without getting in the way.
+        </Feat>
+      </MarginRow>
 
       {/* Pair — Max mode + Onboarding */}
       <Pair a={`${BASE}/pair3-a.mp4`} b={`${BASE}/pair3-b.mp4`} height={630} />
 
-      {/* Outcome (2 col) + Credits / My contributions stack (1 col) — 300px tall */}
-      <div className="flex gap-2 w-full" style={{ height: 300 }}>
-        <TextBlock label="Outcome" style={{ flex: "744 1 0" }}>
-          <p className="leading-[1.35]">
-            Shipped redesigned sorting, filtering, and shortcut systems on Excel for the web. They made
-            everyday actions more approachable for new users while keeping the depth power users rely
-            on.
-          </p>
-        </TextBlock>
-        <div className="flex flex-col gap-2 h-full" style={{ flex: "368 1 0" }}>
-          <TextBlock label="Credits" className="flex-1">
-            <p className="leading-[1.35]">Christian Canton, Alex Malkievicz, Jessie Xue</p>
-          </TextBlock>
-          <TextBlock label="My contributions">
-            <p className="leading-[1.35]">Web UX, Interaction design, Visual design</p>
-          </TextBlock>
-        </div>
-      </div>
+      {/* Outcome — margin label + right column */}
+      <MarginRow label="Outcome">
+        <p className="leading-[1.35]">
+          Shipped redesigned sorting, filtering, and shortcut systems on Excel for the web. They made
+          everyday actions more approachable for new users while keeping the depth power users rely
+          on.
+        </p>
+      </MarginRow>
+
+      {/* Credits + My contributions */}
+      <CreditsRow
+        contributions="Web UX, Interaction design, Visual design"
+        credits="Christian Canton, Alex Malkievicz, Jessie Xue"
+      />
     </div>
   );
 }

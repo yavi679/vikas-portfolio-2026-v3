@@ -4,71 +4,9 @@
    Copy written in portfolio voice (see VOICE.md). */
 
 import VideoHero from "@/components/VideoHero";
+import { MarginRow, Feat, CreditsRow } from "./blocks";
 
 const BASE = "/projects/generative-sfx/case-study";
-
-const LABEL = { color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" } as const;
-const BODY = { color: "#e6e6e6", fontSize: "1rem", letterSpacing: "-0.16px" } as const;
-
-function TextBlock({
-  label,
-  children,
-  align = "top",
-  className = "",
-  style,
-}: {
-  label?: string;
-  children: React.ReactNode;
-  align?: "top" | "bottom";
-  className?: string;
-  style?: React.CSSProperties;
-}) {
-  return (
-    <div
-      className={`flex flex-col gap-2 rounded-2xl ${align === "bottom" ? "justify-end" : "justify-start"} ${className}`}
-      style={{ background: "transparent", padding: 16, ...style }}
-    >
-      {label && (
-        <p className="leading-[1.35] whitespace-nowrap" style={LABEL}>
-          {label}
-        </p>
-      )}
-      <div className="flex flex-col gap-2 leading-[1.35]" style={BODY}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-/* A half-width caption pinned to one side; width matches a full-width media's
-   half exactly: (100% - 8px gap) / 2. */
-function Caption({
-  side,
-  label,
-  children,
-}: {
-  side: "left" | "right";
-  label?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex w-full" style={{ justifyContent: side === "left" ? "flex-start" : "flex-end" }}>
-      <TextBlock label={label} style={{ width: "calc(50% - 4px)" }}>
-        {children}
-      </TextBlock>
-    </div>
-  );
-}
-
-/* A feature note: muted gray name + bullet, then the description in body color. */
-function Feat({ name, children }: { name: string; children: React.ReactNode }) {
-  return (
-    <p className="leading-[1.35]">
-      <span style={{ color: "#808080" }}>{name} • </span>
-      {children}
-    </p>
-  );
-}
 
 /* A showcase card: dark canvas with a centered screenshot floated on it. */
 function Showcase({
@@ -115,20 +53,20 @@ export default function CaseStudyGenerativeSFX() {
       {/* Hero */}
       <VideoHero src="/projects/generative-sfx/01-Generative-sound-effects.mp4" />
 
-      {/* Problem — caption left */}
-      <Caption side="left" label="Problem">
+      {/* Problem — margin label + right column */}
+      <MarginRow label="Problem">
         <p className="leading-[1.35]">
           Sound generation stopped at prompt in, audio out. It ignored the things that make sound land
           on video: timing, motion, and intent. And there was no obvious home for it, no form factor
           for where generative audio should live next to a video.
         </p>
-      </Caption>
+      </MarginRow>
 
       {/* Full-width editor overview */}
       <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/shot-1.webp`} alt="" />
 
-      {/* Approach — caption right */}
-      <Caption side="right" label="Approach">
+      {/* Approach — margin label + right column */}
+      <MarginRow label="Approach">
         <p className="leading-[1.35]">
           I started from the creator, not the model. Sound isn&apos;t something you describe once,
           it&apos;s something you perform against picture. So I built the tool around placing and
@@ -139,26 +77,26 @@ export default function CaseStudyGenerativeSFX() {
           That meant drawing hard lines. No full DAW, capped tracks, capped duration. Every cut kept
           the tool fast and easy to pick up, which matters more than power for a first release.
         </p>
-      </Caption>
+      </MarginRow>
 
-      {/* Lightweight generative timeline — caption left */}
-      <Caption side="left">
+      {/* Lightweight generative timeline — right column */}
+      <MarginRow>
         <Feat name="Lightweight generative timeline">
           A familiar, linear workspace. The opinionated layout makes generative results feel arranged
           and intentional, not like a pile of clips.
         </Feat>
-      </Caption>
+      </MarginRow>
 
       {/* Timeline — full-width */}
       <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/shot-2.webp`} alt="" />
 
-      {/* Automatic video analysis — caption right */}
-      <Caption side="right">
+      {/* Automatic video analysis — right column */}
+      <MarginRow>
         <Feat name="Automatic video analysis">
           The tool reads your footage and builds a starting comp plus a matched library of effects, so
           you open onto cues already on the timeline, not a blank one.
         </Feat>
-      </Caption>
+      </MarginRow>
 
       {/* Analysis — full-width */}
       <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/shot-3.webp`} alt="" />
@@ -173,30 +111,23 @@ export default function CaseStudyGenerativeSFX() {
       {/* Full-width — editor across surfaces */}
       <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/shot-4.webp`} alt="" />
 
-      {/* Outcome (2 col) + Credits / My contributions stack (1 col) — 300px tall */}
-      <div className="flex gap-2 w-full" style={{ height: 300 }}>
-        {/* widths = 2 and 1 of the posts row's 3 columns, so the gutter aligns */}
-        <TextBlock label="Outcome" className="shrink-0" style={{ width: "calc((100% - 16px) / 3 * 2 + 8px)" }}>
-          <p className="leading-[1.35]">
-            Shipped a generative SFX editor on desktop and mobile web, letting creators score sound
-            directly onto video.
-          </p>
-          <p className="leading-[1.35]">
-            The interaction patterns now feed Firefly&apos;s video work and are shaping roadmap
-            priorities across Express and Premiere.
-          </p>
-        </TextBlock>
-        <div className="flex flex-col gap-2 h-full shrink-0" style={{ width: "calc((100% - 16px) / 3)" }}>
-          <TextBlock label="Credits" className="flex-1">
-            <p className="leading-[1.35]">
-              Justin Salomon, Prannoy Mittal, Rahul Gupta, Eshani Pendsey, Sarah Shen, Oriol Nieto
-            </p>
-          </TextBlock>
-          <TextBlock label="My contributions">
-            <p className="leading-[1.35]">Web &amp; mobile web UX, Interaction design, Creative production</p>
-          </TextBlock>
-        </div>
-      </div>
+      {/* Outcome — margin label + right column */}
+      <MarginRow label="Outcome">
+        <p className="leading-[1.35]">
+          Shipped a generative SFX editor on desktop and mobile web, letting creators score sound
+          directly onto video.
+        </p>
+        <p className="leading-[1.35]">
+          The interaction patterns now feed Firefly&apos;s video work and are shaping roadmap
+          priorities across Express and Premiere.
+        </p>
+      </MarginRow>
+
+      {/* Credits + My contributions */}
+      <CreditsRow
+        contributions="Web & mobile web UX, Interaction design, Creative production"
+        credits="Justin Salomon, Prannoy Mittal, Rahul Gupta, Eshani Pendsey, Sarah Shen, Oriol Nieto"
+      />
     </div>
   );
 }

@@ -6,6 +6,7 @@
 import { useState, useEffect } from "react";
 import { Sun, Moon } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import { MarginRow, Feat, CreditsRow } from "./blocks";
 
 const BASE = "/projects/expressive-theming/case-study";
 const THEMES_BASE = "/projects/expressive-theming/themes";
@@ -303,106 +304,43 @@ function ThemeShowcase() {
   );
 }
 
-const LABEL = { color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" } as const;
-const BODY = { color: "#e6e6e6", fontSize: "1rem", letterSpacing: "-0.16px" } as const;
-
-function TextBlock({
-  label,
-  children,
-  align = "top",
-  className = "",
-  style,
-}: {
-  label?: string;
-  children: React.ReactNode;
-  align?: "top" | "bottom";
-  className?: string;
-  style?: React.CSSProperties;
-}) {
-  return (
-    <div
-      className={`flex flex-col gap-2 rounded-2xl ${align === "bottom" ? "justify-end" : "justify-start"} ${className}`}
-      style={{ background: "transparent", padding: 16, ...style }}
-    >
-      {label && (
-        <p className="leading-[1.35] whitespace-nowrap" style={LABEL}>
-          {label}
-        </p>
-      )}
-      <div className="flex flex-col gap-2 leading-[1.35]" style={BODY}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-/* A half-width caption pinned to one side; width matches a full-width media's
-   half exactly: (100% - 8px gap) / 2. */
-function Caption({
-  side,
-  label,
-  children,
-}: {
-  side: "left" | "right";
-  label?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex w-full" style={{ justifyContent: side === "left" ? "flex-start" : "flex-end" }}>
-      <TextBlock label={label} style={{ width: "calc(50% - 4px)" }}>
-        {children}
-      </TextBlock>
-    </div>
-  );
-}
-
-/* A feature note: muted gray name + bullet, then the description in body color. */
-function Feat({ name, children }: { name: string; children: React.ReactNode }) {
-  return (
-    <p className="leading-[1.35]">
-      <span style={{ color: "#808080" }}>{name} • </span>
-      {children}
-    </p>
-  );
-}
-
 export default function CaseStudyExpressiveTheming() {
   return (
     <div className="flex flex-col gap-2 items-center w-full">
       {/* Hero — interactive theming showcase */}
       <ThemeShowcase />
 
-      {/* Problem — caption left */}
-      <Caption side="left" label="Problem">
+      {/* Problem — margin label + right column */}
+      <MarginRow label="Problem">
         <p className="leading-[1.35]">
           Existing themes functioned as surface-level decoration (banners, colors) without
           integrating into the product&apos;s structure. There was no cohesive system to balance
           personalization with usability and brand consistency.
         </p>
-      </Caption>
+      </MarginRow>
 
       {/* Full-width Outlook showcase */}
       <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/hero.webp`} alt="" />
 
-      {/* Approach — caption right */}
-      <Caption side="right" label="Approach">
+      {/* Approach — margin label + right column */}
+      <MarginRow label="Approach">
         <p className="leading-[1.35]">
           Redefined the surface architecture across Outlook, including base layers, containers, and
           elevation systems. This lets visual layers like colors and images blend with the overall
           app chrome while offering a personal productivity environment.
         </p>
-      </Caption>
+      </MarginRow>
 
       {/* Approach — full-width image (surface architecture) */}
       <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/approach.webp`} alt="" />
 
-      {/* Color themes — caption left */}
-      <Caption side="left">
+      {/* Color themes — right column */}
+      <MarginRow>
         <Feat name="Color themes">
           Palettes tuned for accessibility, balancing hue, saturation, and perceived brightness so
           every theme stays legible.
         </Feat>
-      </Caption>
+      </MarginRow>
 
       {/* Two-up — color palette + spectrum (16:9 each) */}
       <div className="flex gap-2 w-full">
@@ -414,53 +352,44 @@ export default function CaseStudyExpressiveTheming() {
         </div>
       </div>
 
-      {/* Pride themes — caption right */}
-      <Caption side="right">
+      {/* Pride themes — right column */}
+      <MarginRow>
         <Feat name="Pride themes">
           Classic, trans, lesbian, bisexual, and non-binary, each built to blend with the new surface
           architecture. Dynamic gradients stay calm behind your reading and turn expressive in the
           non-reading state.
         </Feat>
-      </Caption>
+      </MarginRow>
 
       {/* Pride themes — full-width image */}
       <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/pride.webp`} alt="" />
 
-      {/* Image themes — caption left */}
-      <Caption side="left">
+      {/* Image themes — right column */}
+      <MarginRow>
         <Feat name="Image themes">
           The image sits behind the acrylic layer, keeping legibility and focus for the UI, then opens
           like a window through when the inbox is in its non-reading state.
         </Feat>
-      </Caption>
+      </MarginRow>
 
       {/* Image themes — full-width image */}
       <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/image-themes.webp`} alt="" />
 
-      {/* Outcome (2 col) + Credits / My contributions stack (1 col) — 300px tall */}
-      <div className="flex gap-2 w-full" style={{ height: 300 }}>
-        <TextBlock label="Outcome" style={{ flex: "744 1 0" }}>
-          <p className="leading-[1.35]">
-            Shipped a unified theming system across Outlook, replacing fragmented banner-based
-            customization with one architecture. It let people make the product their own while
-            keeping the clarity and focus they rely on, and gave partner teams a system they could
-            extend.
-          </p>
-        </TextBlock>
-        <div className="flex flex-col gap-2 h-full" style={{ flex: "368 1 0" }}>
-          <TextBlock label="Credits" className="flex-1">
-            <p className="leading-[1.35]">
-              Alexis Copeland, Tati Astua, Yulia M, Horacio G, Pedro Leitin, BUCK Design, Christina
-              Ergonis, Coin Moll
-            </p>
-          </TextBlock>
-          <TextBlock label="My contributions">
-            <p className="leading-[1.35]">
-              Cross-platform UX lead, cross-product alignment, visual system components and libraries
-            </p>
-          </TextBlock>
-        </div>
-      </div>
+      {/* Outcome — margin label + right column */}
+      <MarginRow label="Outcome">
+        <p className="leading-[1.35]">
+          Shipped a unified theming system across Outlook, replacing fragmented banner-based
+          customization with one architecture. It let people make the product their own while
+          keeping the clarity and focus they rely on, and gave partner teams a system they could
+          extend.
+        </p>
+      </MarginRow>
+
+      {/* Credits + My contributions */}
+      <CreditsRow
+        contributions="Cross-platform UX lead, cross-product alignment, visual system components and libraries"
+        credits="Alexis Copeland, Tati Astua, Yulia M, Horacio G, Pedro Leitin, BUCK Design, Christina Ergonis, Coin Moll"
+      />
     </div>
   );
 }
