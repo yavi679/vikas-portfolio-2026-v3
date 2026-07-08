@@ -12,6 +12,13 @@ interface ProjectNavProps {
 export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
   return (
     <nav className="flex flex-col gap-[4px] shrink-0" style={{ width: 368 }}>
+      {/* Wordmark header — equal padding on all sides (fits the logo), pinned to top */}
+      <div
+        className="sticky top-0 z-10 w-full flex items-center justify-center shrink-0"
+        style={{ background: "#0a0a0a", padding: "20%" }}
+      >
+        <img src="/projects/wordmark.svg" alt="Vikas Yadav" className="w-full h-auto" />
+      </div>
       {allProjects.map((p) => {
         const group = getProjectGroup(p.id);
         const active = p.id === selectedId;
