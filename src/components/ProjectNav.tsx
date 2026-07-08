@@ -1,8 +1,8 @@
 "use client";
 
-import { getAllProjects, getProjectGroup } from "@/lib/projects";
+import { getNavProjects, getProjectGroup } from "@/lib/projects";
 
-const allProjects = getAllProjects();
+const allProjects = getNavProjects();
 
 interface ProjectNavProps {
   selectedId: string;
@@ -11,7 +11,7 @@ interface ProjectNavProps {
 
 export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
   return (
-    <nav className="flex flex-col gap-2 shrink-0" style={{ width: 368 }}>
+    <nav className="flex flex-col gap-[4px] shrink-0" style={{ width: 368 }}>
       {allProjects.map((p) => {
         const group = getProjectGroup(p.id);
         const active = p.id === selectedId;
@@ -20,7 +20,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
             key={p.id}
             onClick={() => onSelect(p.id)}
             className={`flex items-center text-left rounded-2xl transition-colors duration-150 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/60 ${
-              active ? "bg-[#262626]" : "hover:bg-[#1a1a1a]"
+              active ? "bg-[#262626]" : "bg-[#1a1a1a] hover:bg-[#262626]"
             }`}
             style={{ padding: 16 }}
           >
@@ -39,14 +39,21 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
                   >
                     {p.year}
                   </span>
-                  {group && (
+                  {group ? (
                     <img
                       src={group.logoUrl}
                       alt={group.company}
                       className="object-contain shrink-0"
                       style={{ width: 16, height: 16 }}
                     />
-                  )}
+                  ) : p.avatarUrl ? (
+                    <img
+                      src={p.avatarUrl}
+                      alt={p.title}
+                      className="object-cover shrink-0"
+                      style={{ width: 16, height: 16, borderRadius: 4, background: "#9BC8F1" }}
+                    />
+                  ) : null}
                 </div>
               </div>
               <p

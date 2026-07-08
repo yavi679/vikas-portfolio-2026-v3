@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { getAllProjects } from "@/lib/projects";
+import { getNavProjects } from "@/lib/projects";
 import ProjectNav from "@/components/ProjectNav";
+import CaseStudyAboutMe from "@/components/case-studies/CaseStudyAboutMe";
 import CaseStudy3DIllustrations from "@/components/case-studies/CaseStudy3DIllustrations";
 import CaseStudyExpressiveTheming from "@/components/case-studies/CaseStudyExpressiveTheming";
 import CaseStudySmartTemplates from "@/components/case-studies/CaseStudySmartTemplates";
@@ -11,6 +12,7 @@ import CaseStudyGenerativeSFX from "@/components/case-studies/CaseStudyGenerativ
 import CaseStudyGenerativeSpeech from "@/components/case-studies/CaseStudyGenerativeSpeech";
 
 const caseStudies: Record<string, React.ComponentType> = {
+  "about-me": CaseStudyAboutMe,
   "generative-sfx": CaseStudyGenerativeSFX,
   "generative-speech": CaseStudyGenerativeSpeech,
   "3d-illustrations": CaseStudy3DIllustrations,
@@ -19,7 +21,7 @@ const caseStudies: Record<string, React.ComponentType> = {
   "ux-redesigns": CaseStudyUXRedesigns,
 };
 
-const allProjects = getAllProjects();
+const allProjects = getNavProjects();
 
 export default function PortfolioViewer() {
   // Default to 3D Illustrations — the one project with a built-out case study.
@@ -106,7 +108,7 @@ export default function PortfolioViewer() {
   }, []);
 
   return (
-    <div className="h-screen w-screen overflow-hidden flex gap-2 p-2" style={{ background: "#0a0a0a" }}>
+    <div className="h-screen w-screen overflow-hidden flex gap-[4px] p-2" style={{ background: "#0a0a0a" }}>
       {/* Column 1 — project nav */}
       <div className="h-full overflow-y-auto shrink-0">
         <ProjectNav selectedId={selectedId} onSelect={setSelectedId} />

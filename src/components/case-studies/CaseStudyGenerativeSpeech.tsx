@@ -10,7 +10,7 @@ const BASE = "/projects/generative-speech/case-study";
 
 export default function CaseStudyGenerativeSpeech() {
   return (
-    <div className="flex flex-col gap-2 items-center w-full">
+    <div className="flex flex-col gap-[4px] items-center w-full">
       {/* Hero */}
       <VideoHero src="/projects/generative-speech/01-Generative-speech.mp4" />
 

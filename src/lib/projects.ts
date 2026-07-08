@@ -13,6 +13,7 @@ export interface Project {
   description: string;
   videoUrl?: string;
   imageUrl?: string;
+  avatarUrl?: string; // rounded avatar shown in the nav (in place of a company logo)
   tryItUrl?: string;
   bg?: string;
   duration?: number; // ms, for image/gif auto-advance
@@ -202,8 +203,23 @@ export const projectGroups: CompanyGroup[] = [
   },
 ];
 
+/* Standalone "About Me" entry — not tied to a company group. */
+export const aboutMe: Project = {
+  id: "about-me",
+  title: "About Vikas",
+  year: "1990",
+  hook: "Seattle-based. Cat dad to Miro. Obsessive about good coffee and intentional living space.",
+  description: "",
+  avatarUrl: "/projects/avatar.png",
+};
+
 export function getAllProjects(): Project[] {
   return projectGroups.flatMap((g) => g.projects);
+}
+
+/* Nav list: About Me first, then every project. */
+export function getNavProjects(): Project[] {
+  return [aboutMe, ...getAllProjects()];
 }
 
 export function getProjectGroup(id: string): CompanyGroup | null {

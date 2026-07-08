@@ -22,7 +22,7 @@ function Media({ src, className = "" }: { src: string; className?: string }) {
 /* Two equal media panels side by side. */
 function Pair({ a, b, height }: { a: string; b: string; height: number }) {
   return (
-    <div className="flex gap-2 w-full" style={{ height }}>
+    <div className="flex gap-[4px] w-full" style={{ height }}>
       <Media src={a} className="flex-1 min-w-px h-full" />
       <Media src={b} className="flex-1 min-w-px h-full" />
     </div>
@@ -31,7 +31,7 @@ function Pair({ a, b, height }: { a: string; b: string; height: number }) {
 
 export default function CaseStudyUXRedesigns() {
   return (
-    <div className="flex flex-col gap-2 items-center w-full">
+    <div className="flex flex-col gap-[4px] items-center w-full">
       {/* Hero */}
       <div className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>
         <video

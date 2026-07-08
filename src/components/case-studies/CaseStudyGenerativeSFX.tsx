@@ -49,7 +49,7 @@ function Showcase({
 
 export default function CaseStudyGenerativeSFX() {
   return (
-    <div className="flex flex-col gap-2 items-center w-full">
+    <div className="flex flex-col gap-[4px] items-center w-full">
       {/* Hero */}
       <VideoHero src="/projects/generative-sfx/01-Generative-sound-effects.mp4" />
 
@@ -102,7 +102,7 @@ export default function CaseStudyGenerativeSFX() {
       <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/shot-3.webp`} alt="" />
 
       {/* Row — three social posts with reach */}
-      <div className="flex gap-2 w-full" style={{ height: 480 }}>
+      <div className="flex gap-[4px] w-full" style={{ height: 480 }}>
         <Showcase src={`${BASE}/post-1.webp`} maxH={400} maxW="62%" caption="9.1M Views" className="flex-1 min-w-px" />
         <Showcase src={`${BASE}/post-2.webp`} maxH={400} maxW="62%" caption="3.5M Views" className="flex-1 min-w-px" />
         <Showcase src={`${BASE}/post-3.webp`} maxH={400} maxW="62%" caption="1.4M Views" className="flex-1 min-w-px" />

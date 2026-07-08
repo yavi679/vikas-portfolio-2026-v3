@@ -65,7 +65,7 @@ function AnimatedPanel() {
 
 export default function CaseStudySmartTemplates() {
   return (
-    <div className="flex flex-col gap-2 items-center w-full">
+    <div className="flex flex-col gap-[4px] items-center w-full">
       {/* Hero */}
       <div className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>
         <video

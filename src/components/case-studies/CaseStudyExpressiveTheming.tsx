@@ -306,7 +306,7 @@ function ThemeShowcase() {
 
 export default function CaseStudyExpressiveTheming() {
   return (
-    <div className="flex flex-col gap-2 items-center w-full">
+    <div className="flex flex-col gap-[4px] items-center w-full">
       {/* Hero — interactive theming showcase */}
       <ThemeShowcase />
 
@@ -343,7 +343,7 @@ export default function CaseStudyExpressiveTheming() {
       </MarginRow>
 
       {/* Two-up — color palette + spectrum (16:9 each) */}
-      <div className="flex gap-2 w-full">
+      <div className="flex gap-[4px] w-full">
         <div className="flex-1 min-w-px aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>
           <img className="w-full h-full object-cover" src={`${BASE}/color-a.webp`} alt="" />
         </div>

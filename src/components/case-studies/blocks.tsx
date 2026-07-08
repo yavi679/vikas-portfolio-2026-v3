@@ -10,8 +10,8 @@ export const BODY = { color: "#e6e6e6", fontSize: "1rem", letterSpacing: "-0.16p
    column. Feature notes pass no label (the left margin stays empty). */
 export function MarginRow({ label, children }: { label?: string; children: ReactNode }) {
   return (
-    <div className="flex w-full gap-2" style={{ paddingTop: 32, paddingBottom: 32 }}>
-      <div className="min-w-px" style={{ width: "calc(50% - 4px)", paddingLeft: 16 }}>
+    <div className="flex w-full gap-[4px]" style={{ paddingTop: 40, paddingBottom: 40 }}>
+      <div className="min-w-px" style={{ width: "calc(50% - 2px)", paddingLeft: 16 }}>
         {label && (
           <p className="leading-[1.35] whitespace-nowrap" style={LABEL}>
             {label}
@@ -20,7 +20,7 @@ export function MarginRow({ label, children }: { label?: string; children: React
       </div>
       <div
         className="min-w-px flex flex-col gap-2 leading-[1.35]"
-        style={{ width: "calc(50% - 4px)", paddingRight: 16, ...BODY }}
+        style={{ width: "calc(50% - 2px)", paddingRight: 16, ...BODY }}
       >
         {children}
       </div>
@@ -55,7 +55,7 @@ export function CreditItem({ label, children }: { label: string; children: React
 /* Footer row: My contributions (left column) + Credits (right column). */
 export function CreditsRow({ contributions, credits }: { contributions: ReactNode; credits: ReactNode }) {
   return (
-    <div className="flex w-full gap-2" style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 32, paddingBottom: 32 }}>
+    <div className="flex w-full gap-[4px]" style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 40, paddingBottom: 40 }}>
       <CreditItem label="My contributions">{contributions}</CreditItem>
       <CreditItem label="Credits">{credits}</CreditItem>
     </div>
