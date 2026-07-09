@@ -1,7 +1,16 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { getNavProjects, getProjectGroup } from "@/lib/projects";
+import { useMeshParams } from "@/components/MeshGradientControls";
+
+/* Paper Shaders animated mesh gradient behind the wordmark. Canvas/WebGL,
+   so load client-only (the #1a1a1a panel shows until it mounts). */
+const MeshGradient = dynamic(
+  () => import("@paper-design/shaders-react").then((m) => m.MeshGradient),
+  { ssr: false }
+);
 
 const allProjects = getNavProjects();
 
@@ -21,6 +30,7 @@ const DEPTH = 1200; // px pushed back in 3D at full recede (~0.55 apparent scale
 const PEEK = 6; // px each stacked card lifts above the one in front (fan)
 
 export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
+  const { params } = useMeshParams();
   const scrollerRef = useRef<HTMLElement>(null);
   const wordmarkRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -89,13 +99,30 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
       className="relative flex flex-col gap-[4px] shrink-0 h-full overflow-y-auto overscroll-none"
       style={{ width: 368 }}
     >
-      {/* Wordmark header — equal padding on all sides (fits the logo), pinned to top */}
+      {/* Wordmark header — equal padding on all sides (fits the logo), pinned to top.
+          The wordmark SVG masks the animated mesh gradient, so the gradient shows
+          through the letterforms and the panel shows everywhere else. */}
       <div
         ref={wordmarkRef}
-        className="sticky top-0 z-[1100] w-full flex items-center justify-center shrink-0"
+        className="sticky top-0 z-[1100] w-full flex items-center justify-center shrink-0 relative overflow-hidden"
         style={{ background: "#1a1a1a", borderRadius: 16, padding: "20%" }}
       >
-        <img src="/projects/wordmark.svg" alt="Vikas Yadav" className="w-full h-auto" />
+        <div
+          className="relative w-full"
+          style={{
+            aspectRatio: "284.357 / 109.823",
+            WebkitMaskImage: "url(/projects/wordmark.svg)",
+            maskImage: "url(/projects/wordmark.svg)",
+            WebkitMaskRepeat: "no-repeat",
+            maskRepeat: "no-repeat",
+            WebkitMaskSize: "contain",
+            maskSize: "contain",
+            WebkitMaskPosition: "center",
+            maskPosition: "center",
+          }}
+        >
+          <MeshGradient className="absolute inset-0" width="100%" height="100%" {...params} />
+        </div>
       </div>
       {allProjects.map((p, i) => {
         const group = getProjectGroup(p.id);
