@@ -86,7 +86,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
   return (
     <nav
       ref={scrollerRef}
-      className="relative flex flex-col gap-[4px] shrink-0 h-full overflow-y-auto"
+      className="relative flex flex-col gap-[4px] shrink-0 h-full overflow-y-auto overscroll-none"
       style={{ width: 368 }}
     >
       {/* Wordmark header — equal padding on all sides (fits the logo), pinned to top */}

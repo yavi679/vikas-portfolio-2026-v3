@@ -5,6 +5,7 @@
    the inspiration over a masonry of personal work. Copy in portfolio voice. */
 
 import { useState, useEffect } from "react";
+import LiquidSlideshow from "./LiquidSlideshow";
 
 /* Light display statement (42px in Figma → 2.625rem at this project's 14px root). */
 const STMT = { color: "#b3b3b3", fontSize: "2.625rem", fontWeight: 300, letterSpacing: "-1.26px", lineHeight: 1.1 } as const;
@@ -73,7 +74,7 @@ const img = (n: string): Asset => ({ src: `${MEDIA}/${n}.webp`, kind: "img" });
 const vid = (n: string): Asset => ({ src: `${MEDIA}/${n}.mp4`, kind: "video" });
 
 const SQ = ["sq1", "sq2", "sq3", "sq4", "sq5"].map(img); // 1:1 photos
-const PH = ["ph1", "ph2", "ph3", "ph4"].map(img); // 4:5 photos
+const PH = ["ph2", "ph3", "ph4"].map(img); // 4:5 photos
 const PV = ["pv1", "pv2", "pv3", "pv5", "pv6", "pv7", "pv8"].map(vid); // 9:16 reels (pv4 was letterboxed 16:9, dropped)
 const SV = ["sv1", "sv2", "sv3", "sv4", "sv5", "sv6"].map(vid); // 1:1 reels
 
@@ -166,32 +167,8 @@ function Masonry() {
   );
 }
 
-/* Right-hand hero: cycles through the 10 interest images with a timed crossfade. */
+/* Right-hand hero: cycles through the 10 interest images with a liquid transition. */
 const HERO_IMAGES = Array.from({ length: 10 }, (_, i) => `${MEDIA}/interest-${i + 1}.webp`);
-
-function Slideshow({ images, interval = 3500 }: { images: string[]; interval?: number }) {
-  const [idx, setIdx] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => setIdx((i) => (i + 1) % images.length), interval);
-    return () => clearInterval(id);
-  }, [images.length, interval]);
-  return (
-    <div
-      className="relative min-w-px rounded-2xl border border-gray-900 overflow-hidden"
-      style={{ width: "calc(50% - 2px)", background: "#1a1a1a" }}
-    >
-      {images.map((src, i) => (
-        <img
-          key={src}
-          src={src}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-out"
-          style={{ opacity: i === idx ? 1 : 0 }}
-        />
-      ))}
-    </div>
-  );
-}
 
 const LOGOS = "/projects/app-logos";
 
@@ -208,8 +185,8 @@ export default function CaseStudyAboutMe() {
             I believe good design begins by listening to people, and speaks back in clarity.
           </p>
         </div>
-        {/* Hero — slideshow of personal interests (fashion, coffee, travel, aesthetics) */}
-        <Slideshow images={HERO_IMAGES} />
+        {/* Hero — liquid-distortion slideshow of personal interests */}
+        <LiquidSlideshow images={HERO_IMAGES} dmap={`${MEDIA}/dmap-clouds.jpg`} interval={9600} />
 
 
       </div>

@@ -115,7 +115,7 @@ export default function PortfolioViewer() {
       </div>
 
       {/* Columns 2–4 — scrolling case study */}
-      <div ref={scrollRef} className="flex-1 h-full overflow-y-auto">
+      <div ref={scrollRef} className="flex-1 h-full overflow-y-auto overscroll-none">
         {/* key re-mounts on switch → scroll resets and the enter animation replays.
             tw-animate-css utilities (shadcn convention); disabled for reduced motion. */}
         <div
