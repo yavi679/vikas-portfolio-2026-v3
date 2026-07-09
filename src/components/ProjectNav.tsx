@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { getNavProjects, getProjectGroup } from "@/lib/projects";
-import { useMeshParams } from "@/components/MeshGradientControls";
+import { useMeshParams, MeshGradientControlPanel } from "@/components/MeshGradientControls";
 
 /* Paper Shaders animated mesh gradient behind the wordmark. Canvas/WebGL,
    so load client-only (the #1a1a1a panel shows until it mounts). */
@@ -30,7 +30,8 @@ const DEPTH = 1200; // px pushed back in 3D at full recede (~0.55 apparent scale
 const PEEK = 6; // px each stacked card lifts above the one in front (fan)
 
 export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
-  const { params } = useMeshParams();
+  const { params, open, setOpen } = useMeshParams();
+  const [everOpened, setEverOpened] = useState(false); // gate the cards' re-entry animation to closes only
   const scrollerRef = useRef<HTMLElement>(null);
   const wordmarkRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -104,9 +105,24 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
           through the letterforms and the panel shows everywhere else. */}
       <div
         ref={wordmarkRef}
-        className="sticky top-0 z-[1100] w-full flex items-center justify-center shrink-0 relative overflow-hidden"
+        className="group sticky top-0 z-[1100] w-full flex items-center justify-center shrink-0 relative overflow-hidden"
         style={{ background: "#1a1a1a", borderRadius: 16, padding: "20%" }}
       >
+        {/* Remix — reveals on wordmark hover; toggles the shader parameter pane */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (!open) setEverOpened(true);
+            setOpen((o) => !o);
+          }}
+          className={`absolute left-[4px] top-[4px] z-20 flex h-9 items-center rounded-full bg-[#333] px-4 text-[#b3b3b3] transition-all hover:bg-[#4d4d4d] hover:text-[#e6e6e6] ${
+            open ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+          }`}
+          style={{ fontSize: "1rem", letterSpacing: "-0.16px", lineHeight: 1.35 }}
+        >
+          {open ? "Close" : "Remix"}
+        </button>
         <div
           className="relative w-full"
           style={{
@@ -124,11 +140,19 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
           <MeshGradient className="absolute inset-0" width="100%" height="100%" {...params} />
         </div>
       </div>
-      {allProjects.map((p, i) => {
-        const group = getProjectGroup(p.id);
-        const active = p.id === selectedId;
-        return (
-          <button
+      {/* Remix open → shader parameters take over the card space; else the cards */}
+      {open && <MeshGradientControlPanel />}
+      {!open && (
+        <div
+          className={`flex w-full flex-col gap-[4px] ${
+            everOpened ? "duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] animate-in fade-in slide-in-from-bottom-[40px]" : ""
+          }`}
+        >
+          {allProjects.map((p, i) => {
+            const group = getProjectGroup(p.id);
+            const active = p.id === selectedId;
+            return (
+              <button
             key={p.id}
             ref={(el) => {
               cardRefs.current[i] = el;
@@ -178,9 +202,11 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
                 {p.hook}
               </p>
             </div>
-          </button>
-        );
-      })}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </nav>
   );
 }

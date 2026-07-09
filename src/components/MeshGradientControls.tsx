@@ -1,24 +1,26 @@
 "use client";
 
-/* Floating design tool for the wordmark's MeshGradient. The params live in a
-   context so this panel and the shader (in ProjectNav) stay in sync. Draggable
-   by its header, collapsible, with presets and a "copy code" button so tuned
-   values can be pasted straight back into the component. */
+/* Floating design tool for the wordmark's MeshGradient. Params live in a context
+   so this panel and the shader (in ProjectNav) stay in sync. Draggable by empty
+   areas (no header). Styled to the Figma redesign (node 885:12421): pill chevron
+   steppers, a 2D HSV color picker per color, capsule-thumb sliders, Copy/Reset. */
 
 import {
   createContext,
   useContext,
   useState,
-  useEffect,
-  useRef,
   type ReactNode,
   type Dispatch,
   type SetStateAction,
-  type PointerEvent as RPointerEvent,
 } from "react";
+import { RotateCcw } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { Stepper } from "@/components/shader-panel/Stepper";
+import { ColorPicker } from "@/components/shader-panel/ColorPicker";
 
-/* Where saved settings live. Bump the suffix if the param shape changes. */
-const STORAGE_KEY = "wordmark-shader-params-v1";
+/* Figma tokens: labels base/600, values base/200, pills base/bg, borders base/900. */
+const LABEL = { color: "#808080", fontSize: "1rem", letterSpacing: "-0.16px", lineHeight: 1.35 } as const;
+const VALUE = { color: "#e6e6e6", fontSize: "1rem", letterSpacing: "-0.16px", lineHeight: 1.35 } as const;
 
 export type MeshParams = {
   colors: string[];
@@ -46,26 +48,18 @@ export const DEFAULT_PARAMS: MeshParams = {
   offsetY: 0,
 };
 
-const PRESETS: Record<string, MeshParams> = {
-  Default: DEFAULT_PARAMS,
-  Ink: { colors: ["#0a0a0a", "#4a4a4a", "#c8c8c8"], distortion: 0.85, swirl: 0.55, grainMixer: 0.5, grainOverlay: 0.45, speed: 0.4, scale: 0.9, rotation: 0, offsetX: 0, offsetY: 0 },
-  Purple: { colors: ["#2b0a4a", "#7b2ff7", "#f107a3"], distortion: 0.9, swirl: 0.45, grainMixer: 0.3, grainOverlay: 0.25, speed: 0.5, scale: 0.8, rotation: 20, offsetX: 0, offsetY: 0 },
-  Beach: { colors: ["#ffe29a", "#ffa99f", "#4bc0c8"], distortion: 0.7, swirl: 0.3, grainMixer: 0.2, grainOverlay: 0.2, speed: 0.6, scale: 0.7, rotation: 0, offsetX: 0, offsetY: 0 },
+type Ctx = {
+  params: MeshParams;
+  setParams: Dispatch<SetStateAction<MeshParams>>;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 };
-
-type Ctx = { params: MeshParams; setParams: Dispatch<SetStateAction<MeshParams>> };
 const MeshCtx = createContext<Ctx | null>(null);
 
 export function MeshParamsProvider({ children }: { children: ReactNode }) {
   const [params, setParams] = useState<MeshParams>(DEFAULT_PARAMS);
-  // Hydrate saved settings after mount (keeps SSR markup matching the default).
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setParams({ ...DEFAULT_PARAMS, ...JSON.parse(raw) });
-    } catch {}
-  }, []);
-  return <MeshCtx.Provider value={{ params, setParams }}>{children}</MeshCtx.Provider>;
+  const [open, setOpen] = useState(false); // shown when the wordmark's Remix button is clicked
+  return <MeshCtx.Provider value={{ params, setParams, open, setOpen }}>{children}</MeshCtx.Provider>;
 }
 
 export function useMeshParams() {
@@ -86,39 +80,28 @@ const SLIDERS: { key: keyof Omit<MeshParams, "colors">; min: number; max: number
   { key: "offsetY", min: -1, max: 1, step: 0.01 },
 ];
 
+const COLOR_MIN = 2;
+const COLOR_MAX = 10;
 const NEW_COLOR = "#3399cc";
+const one = (v: number | readonly number[]) => (Array.isArray(v) ? v[0] : (v as number));
 
-function Row({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="grid grid-cols-[86px_1fr_52px] items-center gap-3">
-      <span className="text-[13px] text-neutral-300 truncate">{label}</span>
-      {children}
-    </div>
-  );
-}
+/* Capsule-thumb slider (Figma): #0d0d0d track, #b3b3b3 fill + wide #b3b3b3/#333 thumb. */
+const SLIDER_CLS =
+  "[&_[data-slot=slider-track]]:h-2.5 [&_[data-slot=slider-track]]:!bg-[#0d0d0d] " +
+  "[&_[data-slot=slider-range]]:!bg-[#b3b3b3] " +
+  "[&_[data-slot=slider-thumb]]:h-6 [&_[data-slot=slider-thumb]]:w-11 [&_[data-slot=slider-thumb]]:rounded-full " +
+  "[&_[data-slot=slider-thumb]]:!border-2 [&_[data-slot=slider-thumb]]:!border-[#333] " +
+  "[&_[data-slot=slider-thumb]]:!bg-[#b3b3b3] " +
+  "[&_[data-slot=slider-thumb]:hover]:!bg-[#e6e6e6] [&_[data-slot=slider-thumb]:active]:!bg-[#e6e6e6]";
+
+const NUM_PILL =
+  "h-9 w-[76px] rounded-full border border-transparent bg-[#0d0d0d] px-4 text-center tabular-nums outline-none " +
+  "transition-colors hover:border-[#333] focus:border-[#333] " +
+  "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none";
 
 export function MeshGradientControlPanel() {
   const { params, setParams } = useMeshParams();
-  const [collapsed, setCollapsed] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [pos, setPos] = useState(() => ({
-    x: typeof window !== "undefined" ? window.innerWidth - 336 : 1000,
-    y: 16,
-  }));
-  const drag = useRef<{ dx: number; dy: number } | null>(null);
-
-  const onDown = (e: RPointerEvent) => {
-    drag.current = { dx: e.clientX - pos.x, dy: e.clientY - pos.y };
-    (e.target as Element).setPointerCapture(e.pointerId);
-  };
-  const onMove = (e: RPointerEvent) => {
-    if (!drag.current) return;
-    setPos({ x: e.clientX - drag.current.dx, y: e.clientY - drag.current.dy });
-  };
-  const onUp = () => {
-    drag.current = null;
-  };
 
   const set = <K extends keyof MeshParams>(key: K, value: MeshParams[K]) =>
     setParams((p) => ({ ...p, [key]: value }));
@@ -138,20 +121,7 @@ export function MeshGradientControlPanel() {
       return { ...p, colors };
     });
 
-  const save = () => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(params));
-    } catch {}
-    setSaved(true);
-    setTimeout(() => setSaved(false), 1200);
-  };
-
-  const reset = () => {
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch {}
-    setParams(DEFAULT_PARAMS);
-  };
+  const reset = () => setParams(DEFAULT_PARAMS);
 
   const copyCode = () => {
     const props = [
@@ -163,135 +133,70 @@ export function MeshGradientControlPanel() {
     setTimeout(() => setCopied(false), 1200);
   };
 
-  const num = "w-full rounded-md bg-neutral-800 px-2 py-1 text-[13px] text-neutral-200 text-right tabular-nums outline-none focus:ring-1 focus:ring-white/30";
-  const range = "w-full accent-neutral-300 cursor-pointer";
-
   return (
     <div
-      className="fixed z-[2000] w-[320px] rounded-2xl border border-white/10 bg-neutral-900/95 backdrop-blur shadow-2xl select-none"
-      style={{ left: pos.x, top: pos.y }}
+      className="relative min-h-0 w-full flex-1 overflow-y-auto rounded-2xl duration-300 ease-out animate-in fade-in slide-in-from-top-[40px]"
+      style={{ background: "#1a1a1a" }}
     >
-      {/* Draggable header */}
-      <div
-        onPointerDown={onDown}
-        onPointerMove={onMove}
-        onPointerUp={onUp}
-        className="flex items-center justify-between px-4 py-3 cursor-grab active:cursor-grabbing"
-      >
-        <span className="text-[13px] font-medium text-neutral-200">Shader</span>
-        <button
-          onClick={() => setCollapsed((c) => !c)}
-          className="text-neutral-400 hover:text-neutral-100 text-sm leading-none px-1"
-        >
-          {collapsed ? "+" : "–"}
-        </button>
+      <div className="flex flex-col items-start gap-6 px-4 py-6">
+      {/* Color Count — pill stepper */}
+      <div className="flex w-full items-center justify-between">
+        <span style={LABEL}>Color Count</span>
+        <Stepper value={params.colors.length} min={COLOR_MIN} max={COLOR_MAX} onChange={setColorCount} />
       </div>
 
-      {!collapsed && (
-        <div className="px-4 pb-4 flex flex-col gap-3">
-          {/* Presets */}
-          <div className="grid grid-cols-2 gap-2">
-            {Object.keys(PRESETS).map((name) => (
-              <button
-                key={name}
-                onClick={() => setParams(PRESETS[name])}
-                className="rounded-md bg-neutral-700 hover:bg-neutral-600 px-3 py-2 text-[13px] text-neutral-200 transition-colors"
-              >
-                {name}
-              </button>
-            ))}
-          </div>
+      {/* One color picker per color */}
+      {params.colors.map((c, i) => (
+        <ColorPicker key={i} index={i} hex={c} onChange={(hex) => setColor(i, hex)} />
+      ))}
 
-          <div className="h-px bg-white/10" />
-
-          {/* colorCount */}
-          <Row label="colorCount">
-            <input
-              type="range"
-              min={2}
-              max={5}
-              step={1}
-              value={params.colors.length}
-              onChange={(e) => setColorCount(+e.target.value)}
-              className={range}
-            />
+      {/* Param sliders — label + value pill on top, capsule slider below */}
+      {SLIDERS.map((s) => (
+        <div key={s.key} className="flex w-full flex-col gap-[4px]">
+          <div className="flex w-full items-center justify-between">
+            <span style={LABEL}>{s.key}</span>
             <input
               type="number"
-              min={2}
-              max={5}
-              value={params.colors.length}
-              onChange={(e) => setColorCount(+e.target.value)}
-              className={num}
+              className={NUM_PILL}
+              style={VALUE}
+              min={s.min}
+              max={s.max}
+              step={s.step}
+              value={params[s.key]}
+              onChange={(e) => set(s.key, +e.target.value)}
             />
-          </Row>
-
-          {/* colors */}
-          {params.colors.map((c, i) => (
-            <Row key={i} label={`color${i + 1}`}>
-              <input
-                type="color"
-                value={c}
-                onChange={(e) => setColor(i, e.target.value)}
-                className="h-7 w-full cursor-pointer rounded-md bg-transparent"
-              />
-              <input
-                type="text"
-                value={c}
-                onChange={(e) => setColor(i, e.target.value)}
-                className="w-full rounded-md bg-neutral-800 px-2 py-1 text-[12px] text-neutral-200 outline-none focus:ring-1 focus:ring-white/30"
-              />
-            </Row>
-          ))}
-
-          {/* numeric sliders */}
-          {SLIDERS.map((s) => (
-            <Row key={s.key} label={s.key}>
-              <input
-                type="range"
-                min={s.min}
-                max={s.max}
-                step={s.step}
-                value={params[s.key]}
-                onChange={(e) => set(s.key, +e.target.value)}
-                className={range}
-              />
-              <input
-                type="number"
-                min={s.min}
-                max={s.max}
-                step={s.step}
-                value={params[s.key]}
-                onChange={(e) => set(s.key, +e.target.value)}
-                className={num}
-              />
-            </Row>
-          ))}
-
-          <div className="h-px bg-white/10" />
-
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={save}
-              className="rounded-md bg-neutral-100 hover:bg-white px-3 py-2 text-[13px] font-medium text-neutral-900 transition-colors"
-            >
-              {saved ? "Saved!" : "Save"}
-            </button>
-            <button
-              onClick={reset}
-              className="rounded-md bg-neutral-700 hover:bg-neutral-600 px-3 py-2 text-[13px] text-neutral-200 transition-colors"
-            >
-              Reset
-            </button>
           </div>
-
-          <button
-            onClick={copyCode}
-            className="rounded-md border border-white/15 hover:bg-white/5 px-3 py-2 text-[13px] text-neutral-300 transition-colors"
-          >
-            {copied ? "Copied!" : "Copy code"}
-          </button>
+          <Slider
+            className={SLIDER_CLS}
+            min={s.min}
+            max={s.max}
+            step={s.step}
+            value={params[s.key]}
+            onValueChange={(v) => set(s.key, one(v))}
+          />
         </div>
-      )}
+      ))}
+
+      {/* Actions — Copy code (wide) + reset icon */}
+      <div className="flex w-full items-center gap-2">
+        <button
+          type="button"
+          onClick={copyCode}
+          className="flex h-12 min-w-px flex-1 items-center justify-center rounded-full bg-[#333] px-6 transition-colors hover:bg-[#404040]"
+          style={{ color: "#b3b3b3", fontSize: "1rem", letterSpacing: "-0.16px" }}
+        >
+          {copied ? "Copied!" : "Copy code"}
+        </button>
+        <button
+          type="button"
+          aria-label="reset"
+          onClick={reset}
+          className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-[#333] text-[#b3b3b3] transition-colors hover:bg-[#0d0d0d]"
+        >
+          <RotateCcw className="size-4" />
+        </button>
+      </div>
+      </div>
     </div>
   );
 }

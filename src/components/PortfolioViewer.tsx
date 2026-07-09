@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { getNavProjects } from "@/lib/projects";
 import ProjectNav from "@/components/ProjectNav";
-import { MeshParamsProvider, MeshGradientControlPanel } from "@/components/MeshGradientControls";
+import { MeshParamsProvider } from "@/components/MeshGradientControls";
 import CaseStudyAboutMe from "@/components/case-studies/CaseStudyAboutMe";
 import CaseStudy3DIllustrations from "@/components/case-studies/CaseStudy3DIllustrations";
 import CaseStudyExpressiveTheming from "@/components/case-studies/CaseStudyExpressiveTheming";
@@ -111,7 +111,6 @@ export default function PortfolioViewer() {
   return (
     <MeshParamsProvider>
     <div className="h-screen w-screen overflow-hidden flex gap-[4px] p-2" style={{ background: "#0a0a0a" }}>
-      <MeshGradientControlPanel />
       {/* Column 1 — project nav (owns its own scroll for the stacking effect) */}
       <div className="h-full shrink-0">
         <ProjectNav selectedId={selectedId} onSelect={setSelectedId} />
