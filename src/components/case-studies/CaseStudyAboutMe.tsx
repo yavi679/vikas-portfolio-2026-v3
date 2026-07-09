@@ -73,7 +73,7 @@ type Asset = { src: string; kind: "img" | "video" };
 const img = (n: string): Asset => ({ src: `${MEDIA}/${n}.webp`, kind: "img" });
 const vid = (n: string): Asset => ({ src: `${MEDIA}/${n}.mp4`, kind: "video" });
 
-const SQ = ["sq1", "sq2", "sq3", "sq4", "sq5"].map(img); // 1:1 photos
+const SQ = ["sq2", "sq3", "sq4", "sq5"].map(img); // 1:1 photos
 const PH = ["ph2", "ph3", "ph4"].map(img); // 4:5 photos
 const PV = ["pv1", "pv2", "pv3", "pv5", "pv6", "pv7", "pv8"].map(vid); // 9:16 reels (pv4 was letterboxed 16:9, dropped)
 const SV = ["sv1", "sv2", "sv3", "sv4", "sv5", "sv6"].map(vid); // 1:1 reels
