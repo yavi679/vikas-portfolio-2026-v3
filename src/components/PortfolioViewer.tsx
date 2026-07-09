@@ -24,8 +24,8 @@ const caseStudies: Record<string, React.ComponentType> = {
 const allProjects = getNavProjects();
 
 export default function PortfolioViewer() {
-  // Default to 3D Illustrations — the one project with a built-out case study.
-  const [selectedId, setSelectedId] = useState("3d-illustrations");
+  // Start on About Vikas — the intro/landing view.
+  const [selectedId, setSelectedId] = useState("about-me");
   const current = allProjects.find((p) => p.id === selectedId);
   const CaseStudy = caseStudies[selectedId];
   const scrollRef = useRef<HTMLDivElement>(null);

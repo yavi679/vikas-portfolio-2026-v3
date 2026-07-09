@@ -166,22 +166,53 @@ function Masonry() {
   );
 }
 
+/* Right-hand hero: cycles through the 10 interest images with a timed crossfade. */
+const HERO_IMAGES = Array.from({ length: 10 }, (_, i) => `${MEDIA}/interest-${i + 1}.webp`);
+
+function Slideshow({ images, interval = 3500 }: { images: string[]; interval?: number }) {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setIdx((i) => (i + 1) % images.length), interval);
+    return () => clearInterval(id);
+  }, [images.length, interval]);
+  return (
+    <div
+      className="relative min-w-px rounded-2xl border border-gray-900 overflow-hidden"
+      style={{ width: "calc(50% - 2px)", background: "#1a1a1a" }}
+    >
+      {images.map((src, i) => (
+        <img
+          key={src}
+          src={src}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-out"
+          style={{ opacity: i === idx ? 1 : 0 }}
+        />
+      ))}
+    </div>
+  );
+}
+
 const LOGOS = "/projects/app-logos";
 
 export default function CaseStudyAboutMe() {
   return (
     <div className="flex flex-col gap-[4px] items-center w-full">
-      {/* Hero — mosaic of personal interests (fashion, coffee, travel, aesthetics).
-          Placeholder until the composed image lands. */}
-      <div
-        className="w-full aspect-[160/90] rounded-2xl border border-gray-900"
-        style={{ background: "#1a1a1a" }}
-      />
+      {/* Top — "How I think" (left) beside the interests hero/slideshow (right) */}
+      <div className="flex w-full gap-[4px] aspect-[1120/630]">
+        <div
+          className="flex items-center min-w-px rounded-2xl"
+          style={{ width: "calc(50% - 2px)", background: "#1a1a1a", paddingLeft: 100, paddingRight: 100 }}
+        >
+          <p style={STMT}>
+            I believe good design begins by listening to people, and speaks back in clarity.
+          </p>
+        </div>
+        {/* Hero — slideshow of personal interests (fashion, coffee, travel, aesthetics) */}
+        <Slideshow images={HERO_IMAGES} />
 
-      {/* How I think */}
-      <Statement>
-        I believe good design begins by listening to people, and speaks back in clarity.
-      </Statement>
+
+      </div>
 
       {/* Experience */}
       <div className="grid grid-cols-2 items-stretch gap-[4px] w-full">
