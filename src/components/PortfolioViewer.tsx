@@ -109,8 +109,8 @@ export default function PortfolioViewer() {
 
   return (
     <div className="h-screen w-screen overflow-hidden flex gap-[4px] p-2" style={{ background: "#0a0a0a" }}>
-      {/* Column 1 — project nav */}
-      <div className="h-full overflow-y-auto shrink-0">
+      {/* Column 1 — project nav (owns its own scroll for the stacking effect) */}
+      <div className="h-full shrink-0">
         <ProjectNav selectedId={selectedId} onSelect={setSelectedId} />
       </div>
 

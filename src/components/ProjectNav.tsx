@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import { getNavProjects, getProjectGroup } from "@/lib/projects";
 
 const allProjects = getNavProjects();
@@ -9,27 +10,107 @@ interface ProjectNavProps {
   onSelect: (id: string) => void;
 }
 
+/* EXPERIMENT (branch experiment/nav-stack): PORTO ROCHA-style stacking deck.
+   The nav is its own scroller; as each card scrolls up past the wordmark it
+   recedes in 3D (perspective + translateZ) and tucks BEHIND the next card
+   (later cards paint in front via ascending z-index). Scrubbed per scroll frame. */
+
+const PERSP = 1500; // per-card perspective (px); origin set per side so each end recedes toward its own edge
+const RANGE = 200; // px of scroll over which a passed card fully recedes
+const DEPTH = 1200; // px pushed back in 3D at full recede (~0.55 apparent scale)
+const PEEK = 6; // px each stacked card lifts above the one in front (fan)
+
 export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
+  const scrollerRef = useRef<HTMLElement>(null);
+  const wordmarkRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    let raf = 0;
+
+    const update = () => {
+      raf = 0;
+      const sTop = scroller.scrollTop;
+      const topFocal = wordmarkRef.current?.offsetHeight ?? 0; // top stack pins just under the wordmark
+      const cardH = cardRefs.current[0]?.offsetHeight ?? 0;
+      const bottomFocal = scroller.clientHeight - cardH; // bottom stack pins flush at the bottom edge
+      let depthTop = 0;
+      let depthBot = 0;
+      for (const el of cardRefs.current) {
+        if (!el) continue;
+        const vp = el.offsetTop - sTop; // card top relative to nav top
+        if (vp < topFocal) {
+          // above the top line → recede up into the stack
+          const past = topFocal - vp;
+          const t = Math.min(past / RANGE, 1);
+          const fade = t < 0.85 ? 1 : 1 - (t - 0.85) / 0.15;
+          el.style.transformOrigin = "50% 0%"; // recede toward its top edge → up, behind the wordmark
+          el.style.transform = `perspective(${PERSP}px) translateY(${past - depthTop * PEEK}px) translateZ(${-t * DEPTH}px)`;
+          el.style.opacity = String(Math.max(fade, 0));
+          el.style.zIndex = String(Math.round((1 - t) * 999)); // more receded → further back
+          depthTop++;
+        } else if (vp > bottomFocal) {
+          // below the bottom line → recede down into the stack (mirror of the top)
+          const past = vp - bottomFocal;
+          const t = Math.min(past / RANGE, 1);
+          const fade = t < 0.85 ? 1 : 1 - (t - 0.85) / 0.15;
+          el.style.transformOrigin = "50% 100%"; // recede toward its bottom edge → down (mirror of top)
+          el.style.transform = `perspective(${PERSP}px) translateY(${-past + depthBot * PEEK}px) translateZ(${-t * DEPTH}px)`;
+          el.style.opacity = String(Math.max(fade, 0));
+          el.style.zIndex = String(Math.round((1 - t) * 999));
+          depthBot++;
+        } else {
+          // in the flat middle band → resting, frontmost
+          el.style.transform = "";
+          el.style.opacity = "1";
+          el.style.zIndex = "1000";
+        }
+      }
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    update();
+    return () => {
+      scroller.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
-    <nav className="flex flex-col gap-[4px] shrink-0" style={{ width: 368 }}>
+    <nav
+      ref={scrollerRef}
+      className="relative flex flex-col gap-[4px] shrink-0 h-full overflow-y-auto"
+      style={{ width: 368 }}
+    >
       {/* Wordmark header — equal padding on all sides (fits the logo), pinned to top */}
       <div
-        className="sticky top-0 z-10 w-full flex items-center justify-center shrink-0"
-        style={{ background: "#0a0a0a", padding: "20%" }}
+        ref={wordmarkRef}
+        className="sticky top-0 z-[1100] w-full flex items-center justify-center shrink-0"
+        style={{ background: "#1a1a1a", borderRadius: 16, padding: "20%" }}
       >
         <img src="/projects/wordmark.svg" alt="Vikas Yadav" className="w-full h-auto" />
       </div>
-      {allProjects.map((p) => {
+      {allProjects.map((p, i) => {
         const group = getProjectGroup(p.id);
         const active = p.id === selectedId;
         return (
           <button
             key={p.id}
+            ref={(el) => {
+              cardRefs.current[i] = el;
+            }}
             onClick={() => onSelect(p.id)}
-            className={`flex items-center text-left rounded-2xl transition-colors duration-150 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/60 ${
+            className={`flex items-center text-left rounded-2xl transition-colors duration-150 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/60 shrink-0 ${
               active ? "bg-[#262626]" : "bg-[#1a1a1a] hover:bg-[#262626]"
             }`}
-            style={{ padding: 16 }}
+            style={{ padding: 16, willChange: "transform, opacity" }}
           >
             <div className="flex flex-1 flex-col gap-2 min-w-px">
               <div className="flex gap-2 items-start w-full">
