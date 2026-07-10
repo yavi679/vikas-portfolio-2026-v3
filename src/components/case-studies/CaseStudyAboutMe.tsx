@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import LiquidSlideshow from "./LiquidSlideshow";
 
 /* Light display statement (42px in Figma → 2.625rem at this project's 14px root). */
-const STMT = { color: "#b3b3b3", fontSize: "2.625rem", fontWeight: 300, letterSpacing: "-1.26px", lineHeight: 1.1 } as const;
+const STMT = { color: "#e6e6e6", fontSize: "2.625rem", fontWeight: 300, letterSpacing: "-0.84px", lineHeight: 1.1 } as const;
 const META = { color: "#e6e6e6", fontSize: "1rem", letterSpacing: "-0.48px" } as const;
 const BODY = { color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" } as const;
 
@@ -17,7 +17,7 @@ function Statement({ children }: { children: React.ReactNode }) {
   return (
     <div
       className="flex w-full justify-center rounded-2xl"
-      style={{ background: "#1a1a1a", paddingLeft: 200, paddingRight: 200, paddingTop: 128, paddingBottom: 128 }}
+      style={{ background: "#1a1a1a", padding: 200 }}
     >
       <p className="w-full" style={{ ...STMT, maxWidth: 700 }}>
         {children}
@@ -42,7 +42,7 @@ function ExpCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-start h-full w-full rounded-2xl" style={{ background: "#1a1a1a", padding: 24 }}>
+    <div className="flex items-start h-full w-full rounded-2xl" style={{ padding: 24 }}>
       <div className="flex flex-1 min-w-px flex-col items-start" style={{ gap: 24 }}>
         <div className="flex items-start justify-between w-full">
           <div className="flex gap-2 items-center shrink-0">
@@ -123,7 +123,7 @@ function Media({ asset }: { asset: Asset }) {
 
 /* Crossfades to a new asset: the incoming layer fades in over the current one,
    then becomes current. */
-function Tile({ area, asset }: { area: React.CSSProperties; asset: Asset }) {
+function Tile({ area, asset, delay }: { area: React.CSSProperties; asset: Asset; delay: number }) {
   const [shown, setShown] = useState(asset);
   const [incoming, setIncoming] = useState<Asset | null>(null);
   useEffect(() => {
@@ -132,14 +132,17 @@ function Tile({ area, asset }: { area: React.CSSProperties; asset: Asset }) {
     const t = setTimeout(() => {
       setShown(asset);
       setIncoming(null);
-    }, 750);
+    }, delay + 320);
     return () => clearTimeout(t);
-  }, [asset, shown.src]);
+  }, [asset, shown.src, delay]);
   return (
     <div className="relative overflow-hidden border border-gray-900" style={{ background: "#1a1a1a", borderRadius: 16, ...area }}>
       <Media asset={shown} />
       {incoming && (
-        <div className="absolute inset-0 animate-in fade-in duration-700 ease-out">
+        <div
+          className="absolute inset-0 animate-in fade-in duration-300 ease-out"
+          style={{ animationDelay: `${delay}ms` }}
+        >
           <Media asset={incoming} />
         </div>
       )}
@@ -161,7 +164,7 @@ function Masonry() {
       style={{ gridTemplateColumns: "repeat(3, 1fr)", gridTemplateRows: "repeat(5, 1fr)" }}
     >
       {TILES.map((t, i) => (
-        <Tile key={i} area={t.area} asset={sel[i]} />
+        <Tile key={i} area={t.area} asset={sel[i]} delay={i * 40} />
       ))}
     </div>
   );
@@ -175,54 +178,63 @@ const LOGOS = "/projects/app-logos";
 export default function CaseStudyAboutMe() {
   return (
     <div className="flex flex-col gap-[4px] items-center w-full">
-      {/* Top — "How I think" (left) beside the interests hero/slideshow (right) */}
+      {/* Intro */}
+      <Statement>
+        <img
+          src={`${MEDIA}/waving-hand.webp`}
+          alt="waving hand"
+          className="mr-2 inline-block"
+          style={{ width: "1em", height: "1em", verticalAlign: "-0.12em" }}
+        />
+        I&apos;m Vikas. I believe good design listens to people and speaks back with clarity.
+      </Statement>
+
+      {/* Top — inspiration line (left) beside the interests hero/slideshow (right) */}
       <div className="flex w-full gap-[4px] aspect-[1120/630]">
         <div
           className="flex items-center min-w-px rounded-2xl"
-          style={{ width: "calc(50% - 2px)", background: "#1a1a1a", paddingLeft: 100, paddingRight: 100 }}
+          style={{ width: "calc(50% - 2px)", background: "#1a1a1a", paddingLeft: 90, paddingRight: 90 }}
         >
-          <p style={STMT}>
-            I believe good design begins by listening to people, and speaks back in clarity.
-          </p>
+          <p style={STMT}>I look for things in the world that make my heart go 💗</p>
         </div>
         {/* Hero — liquid-distortion slideshow of personal interests */}
         <LiquidSlideshow images={HERO_IMAGES} dmap={`${MEDIA}/dmap-clouds.jpg`} interval={9600} />
-
-
       </div>
 
-      {/* Experience */}
-      <div className="grid grid-cols-2 items-stretch gap-[4px] w-full">
+      {/* Experience — quote + 2x2 cards combined in one rounded panel */}
+      <div className="flex w-full flex-col gap-[4px] rounded-[32px]" style={{ background: "#1a1a1a" }}>
+        <div className="flex w-full items-center justify-center" style={{ padding: 200 }}>
+          <p className="w-full" style={{ ...STMT, maxWidth: 700 }}>
+            Something about 8yrs of experience, working with people, love making tools for people.
+          </p>
+        </div>
+        <div
+          className="grid grid-cols-2 items-stretch gap-[40px] w-full"
+          style={{ paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }}
+        >
         <ExpCard logo={`${LOGOS}/adobe-firefly.webp`} company="Adobe Firefly" years="2023, 2026" role="Product designer, GenAI">
-          At Adobe Firefly I lead interaction design across our flagship generative AI tools, spanning 3D,
-          imaging, video, and audio. I take things like Generative Sound Effects and Generate Speech from concept
-          to shipped product, mostly by holding the tension between creative control, trust, and ease of use
-          while the AI keeps shifting under me. That balance is a big part of how we stay competitive in the
-          creator space.
+          I lead interaction design across Firefly&apos;s generative AI tools, shipping features like Generative
+          Sound Effects and Generate Speech from idea to launch.
         </ExpCard>
         <ExpCard logo={`${LOGOS}/microsoft-outlook.webp`} company="Microsoft Outlook" years="2020, 2023" role="Product designer">
-          On Microsoft Outlook I got to set direction, not just ship features. I authored the AI email
-          intelligence framework that became our standard for bringing AI into the reading experience, later
-          powering Bookmarks, Viva, and Teams. As visual lead, I also delivered 17 themes and rethought
-          elevation, layering, and color tokens inside Fluent.
+          I authored Outlook&apos;s AI email framework, later reused in Bookmarks, Viva, and Teams. As visual lead
+          I shipped 17 themes into Fluent.
         </ExpCard>
         <ExpCard logo={`${LOGOS}/microsoft-excel.webp`} company="Microsoft Excel" years="2018, 2020" role="UX Designer">
-          Microsoft Excel is where I cut my teeth on foundational UX at scale. I led the filtering and keyboard
-          shortcut redesigns on Excel for the web, making interactions millions rely on more discoverable. I also
-          shipped 10+ Smart Templates using Wolfram-powered Data Types to make them genuinely data-rich.
+          I redesigned filtering and keyboard shortcuts on Excel for the web, and shipped 10+ Smart Templates
+          powered by Wolfram Data Types.
         </ExpCard>
         <ExpCard logo={`${LOGOS}/CMU.webp`} company="Carnegie Mellon University" years="2016, 2018" role="M Des, Interaction Design">
-          I earned my M.Des in Interaction Design from Carnegie Mellon, where I worked with partners like Philips
-          and Microsoft HoloLens on design that solves real everyday problems, and TA&apos;d the Interaction
-          Design Studio for sophomores and juniors across three semesters. My internship at Microsoft had me
-          building a management solution for the 130+ buildings on the Redmond campus.
+          M.Des in Interaction Design. I worked with Philips and Microsoft HoloLens, TA&apos;d the Interaction
+          Design Studio for three semesters, and interned at Microsoft managing its 130+ Redmond buildings.
         </ExpCard>
+        </div>
       </div>
 
       {/* What inspires me */}
       <Statement>
-        I came to product design from architecture, still chasing the same things: texture, light, and the way
-        nature holds them. These are my attempts to observe it closely, then bend it toward play.
+        I came to product design from architecture, chasing the same things: texture, light, and the way nature
+        holds them. These are my attempts to observe those closely, then bend them towards play.
       </Statement>
 
       {/* Masonry — personal work, reshuffling every 20s */}
