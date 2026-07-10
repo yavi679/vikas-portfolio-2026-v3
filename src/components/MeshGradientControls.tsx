@@ -95,7 +95,7 @@ const SLIDER_CLS =
   "[&_[data-slot=slider-thumb]:hover]:!bg-[#e6e6e6] [&_[data-slot=slider-thumb]:active]:!bg-[#e6e6e6]";
 
 const NUM_PILL =
-  "h-9 w-[76px] rounded-full border border-transparent bg-[#0d0d0d] px-4 text-center tabular-nums outline-none " +
+  "h-9 w-[64px] rounded-full border border-transparent bg-[#0d0d0d] px-4 text-center tabular-nums outline-none " +
   "transition-colors hover:border-[#333] focus:border-[#333] " +
   "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none";
 

@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { getNavProjects } from "@/lib/projects";
 import ProjectNav from "@/components/ProjectNav";
-import { MeshParamsProvider } from "@/components/MeshGradientControls";
+import { MeshParamsProvider, useMeshParams } from "@/components/MeshGradientControls";
 import CaseStudyAboutMe from "@/components/case-studies/CaseStudyAboutMe";
 import CaseStudy3DIllustrations from "@/components/case-studies/CaseStudy3DIllustrations";
 import CaseStudyExpressiveTheming from "@/components/case-studies/CaseStudyExpressiveTheming";
@@ -11,6 +12,12 @@ import CaseStudySmartTemplates from "@/components/case-studies/CaseStudySmartTem
 import CaseStudyUXRedesigns from "@/components/case-studies/CaseStudyUXRedesigns";
 import CaseStudyGenerativeSFX from "@/components/case-studies/CaseStudyGenerativeSFX";
 import CaseStudyGenerativeSpeech from "@/components/case-studies/CaseStudyGenerativeSpeech";
+
+/* Full-bleed gradient preview (the shader without the wordmark mask). */
+const MeshGradient = dynamic(
+  () => import("@paper-design/shaders-react").then((m) => m.MeshGradient),
+  { ssr: false }
+);
 
 const caseStudies: Record<string, React.ComponentType> = {
   "about-me": CaseStudyAboutMe,
@@ -25,6 +32,15 @@ const caseStudies: Record<string, React.ComponentType> = {
 const allProjects = getNavProjects();
 
 export default function PortfolioViewer() {
+  return (
+    <MeshParamsProvider>
+      <PortfolioStage />
+    </MeshParamsProvider>
+  );
+}
+
+function PortfolioStage() {
+  const { params, open } = useMeshParams();
   // Start on About Vikas — the intro/landing view.
   const [selectedId, setSelectedId] = useState("about-me");
   const current = allProjects.find((p) => p.id === selectedId);
@@ -32,6 +48,18 @@ export default function PortfolioViewer() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const targetY = useRef(0);
   const rafId = useRef<number | null>(null);
+
+  // Mount the preview canvas while Remix is open (and through the slide-back), so
+  // it never blanks mid-transition and isn't left running when idle.
+  const [showPreview, setShowPreview] = useState(false);
+  useEffect(() => {
+    if (open) {
+      setShowPreview(true);
+      return;
+    }
+    const t = setTimeout(() => setShowPreview(false), 500);
+    return () => clearTimeout(t);
+  }, [open]);
 
   // Always start a project at the top, even when returning to one viewed before.
   useEffect(() => {
@@ -109,36 +137,54 @@ export default function PortfolioViewer() {
   }, []);
 
   return (
-    <MeshParamsProvider>
     <div className="h-screen w-screen overflow-hidden flex gap-[4px] p-2" style={{ background: "#0a0a0a" }}>
       {/* Column 1 — project nav (owns its own scroll for the stacking effect) */}
       <div className="h-full shrink-0">
         <ProjectNav selectedId={selectedId} onSelect={setSelectedId} />
       </div>
 
-      {/* Columns 2–4 — scrolling case study */}
-      <div ref={scrollRef} className="flex-1 h-full overflow-y-auto overscroll-none">
-        {/* key re-mounts on switch → scroll resets and the enter animation replays.
-            tw-animate-css utilities (shadcn convention); disabled for reduced motion. */}
+      {/* Columns 2–4 — a horizontal track: project detail, then the gradient
+          preview. Remix (open) slides the preview in from the right, pushing the
+          detail left; closing reverses it back to what was being viewed. */}
+      <div className="flex-1 h-full overflow-hidden">
         <div
-          key={selectedId}
-          className="animate-in fade-in-0 slide-in-from-bottom-[40px] duration-500 ease-out motion-reduce:animate-none"
+          className="flex h-full duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transition-transform"
+          style={{ width: "200%", transform: open ? "translateX(-50%)" : "translateX(0)" }}
         >
-          {CaseStudy ? (
-            <CaseStudy />
-          ) : (
-            <div
-              className="w-full flex items-center justify-center rounded-2xl"
-              style={{ background: "#1a1a1a", minHeight: "100%" }}
-            >
-              <p className="leading-[1.35]" style={{ color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" }}>
-                {current?.title} — case study coming soon.
-              </p>
+          {/* Project detail (its own scroll) */}
+          <div className="h-full w-1/2 shrink-0">
+            <div ref={scrollRef} className="h-full overflow-y-auto overscroll-none">
+              {/* key re-mounts on switch → scroll resets and the enter animation replays. */}
+              <div
+                key={selectedId}
+                className="animate-in fade-in-0 slide-in-from-bottom-[40px] duration-500 ease-out motion-reduce:animate-none"
+              >
+                {CaseStudy ? (
+                  <CaseStudy />
+                ) : (
+                  <div
+                    className="w-full flex items-center justify-center rounded-2xl"
+                    style={{ background: "#1a1a1a", minHeight: "100%" }}
+                  >
+                    <p className="leading-[1.35]" style={{ color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" }}>
+                      {current?.title} — case study coming soon.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-          )}
+          </div>
+
+          {/* Full-bleed gradient preview */}
+          <div className="h-full w-1/2 shrink-0">
+            <div className="relative h-full w-full overflow-hidden rounded-2xl" style={{ background: "#1a1a1a" }}>
+              {showPreview && (
+                <MeshGradient className="absolute inset-0" width="100%" height="100%" {...params} />
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    </MeshParamsProvider>
   );
 }

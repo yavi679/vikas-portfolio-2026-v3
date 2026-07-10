@@ -90,8 +90,9 @@ export default function LiquidSlideshow({
         gsap
           .timeline({ onComplete: () => { cur = next; playing = false; } })
           .to(filter.scale, { x: 800, y: 500, duration: 3, ease: "power2.out" }, 0)
-          .to(sprites[cur], { alpha: 0, duration: 3, ease: "power2.out" }, 0)
-          .to(sprites[next], { alpha: 1, duration: 2, ease: "power2.out" }, 2)
+          // quick, overlapping crossfade under the peak distortion (not the pacing)
+          .to(sprites[cur], { alpha: 0, duration: 1.2, ease: "power2.out" }, 1.4)
+          .to(sprites[next], { alpha: 1, duration: 1.2, ease: "power2.out" }, 1.4)
           .to(filter.scale, { x: 0, y: 0, duration: 3, ease: "expo.out" }, 1.6);
       };
       const timer = setInterval(() => move((cur + 1) % sprites.length), interval);
