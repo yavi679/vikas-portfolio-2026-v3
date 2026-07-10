@@ -82,23 +82,6 @@ export const projectGroups: CompanyGroup[] = [
     description: "Led 0→1 design of generative audio tools and multi-model UX systems.",
     projects: [
       {
-        id: "generative-sfx",
-        title: "Generative SFX",
-        year: "2024, 2025",
-        tryItUrl: "https://firefly.adobe.com/generate/sound-effects",
-        hook: "Turning sound effects into something you perform in time, not describe in prompts.",
-        description:
-          "Defined a new interaction model for generative audio combining performance-driven input with a lightweight timeline system to enable precise, iterative sound design directly on video.",
-        videoUrl: "/projects/Gen-audio/01-Generative-sound-effects.mp4",
-        bg: "#000000",
-        details: {
-          context: "Adobe had a mature generative SFX model but no product surface, risking both wasted investment and loss of competitive positioning in AI-driven video workflows.",
-          problem: "Existing approaches treated sound generation as prompt → output, disconnected from timing, motion, and creative intent. There was no clear form factor for how generative audio should integrate with video.",
-          approach: "Reframed sound creation as performance in context.\n\nDefined product direction and constraints for an early-stage system:\n• performance-driven input for timing and energy control\n• attached generation sets for in-context comparison\n• lightweight timeline system for placement, snapping, and iteration\n\nMade intentional tradeoffs avoiding full DAW complexity and limiting scope (track count, duration) to prioritize clarity, speed, and adoption.",
-          outcome: "Shipped a generative SFX editor across desktop & mobile web surfaces, enabling creators to compose sound directly on video.\n\nEstablished interaction patterns now informing Firefly video workflows and influencing roadmap prioritization across Express and Premiere.",
-        },
-      },
-      {
         id: "generative-speech",
         title: "Generative Speech",
         year: "2025",
@@ -113,6 +96,23 @@ export const projectGroups: CompanyGroup[] = [
           problem: "Most speech tools optimized for output quality, but lacked control, iteration, and integration into real creative workflows. Prompt → generate was too rigid for expressive use.",
           approach: "Reframed speech generation as orchestration.\n\nDefined a platform model supporting both native and third-party speech systems, alongside reusable interaction primitives:\n• model selection with preview'able voice states\n• versioned generation history for iterative comparison\n• segment-level auditioning with emotion-aware playback\n\nMade key tradeoffs toward simplicity by intentionally avoiding timeline editing and full text tooling to prioritize speed, clarity, and early adoption.",
           outcome: "Shipped Adobe's first generative speech experience, establishing patterns now referenced across products like Express and Premiere.\n\nPositioned Adobe as a platform for generative audio enabling future expansion across tools and workflows.",
+        },
+      },
+      {
+        id: "generative-sfx",
+        title: "Generative SFX",
+        year: "2024, 2025",
+        tryItUrl: "https://firefly.adobe.com/generate/sound-effects",
+        hook: "Turning sound effects into something you perform in time, not describe in prompts.",
+        description:
+          "Defined a new interaction model for generative audio combining performance-driven input with a lightweight timeline system to enable precise, iterative sound design directly on video.",
+        videoUrl: "/projects/Gen-audio/01-Generative-sound-effects.mp4",
+        bg: "#000000",
+        details: {
+          context: "Adobe had a mature generative SFX model but no product surface, risking both wasted investment and loss of competitive positioning in AI-driven video workflows.",
+          problem: "Existing approaches treated sound generation as prompt → output, disconnected from timing, motion, and creative intent. There was no clear form factor for how generative audio should integrate with video.",
+          approach: "Reframed sound creation as performance in context.\n\nDefined product direction and constraints for an early-stage system:\n• performance-driven input for timing and energy control\n• attached generation sets for in-context comparison\n• lightweight timeline system for placement, snapping, and iteration\n\nMade intentional tradeoffs avoiding full DAW complexity and limiting scope (track count, duration) to prioritize clarity, speed, and adoption.",
+          outcome: "Shipped a generative SFX editor across desktop & mobile web surfaces, enabling creators to compose sound directly on video.\n\nEstablished interaction patterns now informing Firefly video workflows and influencing roadmap prioritization across Express and Premiere.",
         },
       },
     ],

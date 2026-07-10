@@ -8,7 +8,7 @@
    hero reel is kept. */
 
 import VideoHero from "@/components/VideoHero";
-import { MarginRow, CreditsRow } from "./blocks";
+import { MarginRow, OutcomeCredits } from "./blocks";
 
 const BASE = "/projects/3d-illustrations/case-study";
 
@@ -82,20 +82,20 @@ export default function CaseStudy3DIllustrations() {
       <img className="w-full aspect-[1120/232] rounded-2xl object-cover border border-gray-900" src={`${BASE}/grid-light.webp`} alt="" />
       <img className="w-full aspect-[1120/232] rounded-2xl object-cover border border-gray-900" src={`${BASE}/grid-dark.webp`} alt="" />
 
-      {/* Outcome — margin label + right column */}
-      <MarginRow label="Outcome">
-        <p className="leading-[1.35]">
-          Produced and shipped 100+ illustrations across web, desktop, and mobile, in both light and
-          dark.
-        </p>
-        <p className="leading-[1.35]">
-          They replaced a patchwork of one-off visuals with a single system, a shared library and
-          guidelines now used across Outlook.
-        </p>
-      </MarginRow>
-
-      {/* Credits + My contributions */}
-      <CreditsRow
+      {/* Outcome + credits — one container */}
+      <OutcomeCredits
+        outcome={
+          <>
+            <p className="leading-[1.35]">
+              Produced and shipped 100+ illustrations across web, desktop, and mobile, in both light and
+              dark.
+            </p>
+            <p className="leading-[1.35]">
+              They replaced a patchwork of one-off visuals with a single system, a shared library and
+              guidelines now used across Outlook.
+            </p>
+          </>
+        }
         contributions={"Product evangelism & integration, Art & creative direction, Visual production"}
         credits="Alexis Copeland, Tati Astua, Yulia M, Horacio G, Pedro Leitin, BUCK Design, Christina Ergonis, Coin Moll"
       />

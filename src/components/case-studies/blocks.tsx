@@ -10,7 +10,7 @@ export const BODY = { color: "#e6e6e6", fontSize: "1rem", letterSpacing: "-0.16p
    column. Feature notes pass no label (the left margin stays empty). */
 export function MarginRow({ label, children }: { label?: string; children: ReactNode }) {
   return (
-    <div className="flex w-full gap-[4px]" style={{ paddingTop: 40, paddingBottom: 40 }}>
+    <div className="flex w-full gap-[4px]" style={{ paddingTop: 64, paddingBottom: 64 }}>
       <div className="min-w-px" style={{ width: "calc(50% - 2px)", paddingLeft: 16 }}>
         {label && (
           <p className="leading-[1.35] whitespace-nowrap" style={LABEL}>
@@ -38,26 +38,44 @@ export function Feat({ name, children }: { name: string; children: ReactNode }) 
   );
 }
 
-/* One label + value pair with a fixed-width label sub-column. */
-export function CreditItem({ label, children }: { label: string; children: ReactNode }) {
+/* Combined footer: Outcome (label + body) and the credits row in one container,
+   so the gap between them is a single 64px instead of two stacked 64px paddings. */
+export function OutcomeCredits({
+  outcome,
+  contributions,
+  credits,
+}: {
+  outcome: ReactNode;
+  contributions: ReactNode;
+  credits: ReactNode;
+}) {
   return (
-    <div className="flex flex-1 min-w-px">
-      <p className="leading-[1.35] shrink-0" style={{ ...LABEL, width: 180 }}>
-        {label}
-      </p>
-      <p className="leading-[1.35] flex-1 min-w-px" style={BODY}>
-        {children}
-      </p>
-    </div>
-  );
-}
-
-/* Footer row: My contributions (left column) + Credits (right column). */
-export function CreditsRow({ contributions, credits }: { contributions: ReactNode; credits: ReactNode }) {
-  return (
-    <div className="flex w-full gap-[4px]" style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 40, paddingBottom: 40 }}>
-      <CreditItem label="My contributions">{contributions}</CreditItem>
-      <CreditItem label="Credits">{credits}</CreditItem>
+    <div className="flex w-full flex-col gap-[64px]" style={{ paddingTop: 64, paddingBottom: 64 }}>
+      {/* Outcome — label left, body right */}
+      <div className="flex w-full gap-[4px]">
+        <div className="min-w-px" style={{ width: "calc(50% - 2px)", paddingLeft: 16 }}>
+          <p className="leading-[1.35] whitespace-nowrap" style={LABEL}>
+            Outcome
+          </p>
+        </div>
+        <div className="min-w-px flex flex-col gap-2 leading-[1.35]" style={{ width: "calc(50% - 2px)", paddingRight: 16, ...BODY }}>
+          {outcome}
+        </div>
+      </div>
+      {/* My contributions + Credits — right half, two columns */}
+      <div className="flex w-full gap-[4px]">
+        <div className="min-w-px" style={{ width: "calc(50% - 2px)" }} />
+        <div className="flex min-w-px gap-[4px]" style={{ width: "calc(50% - 2px)", paddingRight: 16 }}>
+          <p className="flex-1 min-w-px leading-[1.35]" style={BODY}>
+            <span style={{ color: "#808080" }}>My contributions • </span>
+            {contributions}
+          </p>
+          <p className="flex-1 min-w-px leading-[1.35]" style={BODY}>
+            <span style={{ color: "#808080" }}>Credits • </span>
+            {credits}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

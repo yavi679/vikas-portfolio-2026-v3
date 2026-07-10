@@ -6,7 +6,7 @@
 import { useState, useEffect } from "react";
 import { Sun, Moon } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
-import { MarginRow, Feat, CreditsRow } from "./blocks";
+import { MarginRow, Feat, OutcomeCredits } from "./blocks";
 
 const BASE = "/projects/expressive-theming/case-study";
 const THEMES_BASE = "/projects/expressive-theming/themes";
@@ -375,18 +375,16 @@ export default function CaseStudyExpressiveTheming() {
       {/* Image themes — full-width image */}
       <img className="w-full aspect-video rounded-2xl object-cover border border-gray-900" src={`${BASE}/image-themes.webp`} alt="" />
 
-      {/* Outcome — margin label + right column */}
-      <MarginRow label="Outcome">
-        <p className="leading-[1.35]">
-          Shipped a unified theming system across Outlook, replacing fragmented banner-based
-          customization with one architecture. It let people make the product their own while
-          keeping the clarity and focus they rely on, and gave partner teams a system they could
-          extend.
-        </p>
-      </MarginRow>
-
-      {/* Credits + My contributions */}
-      <CreditsRow
+      {/* Outcome + credits — one container */}
+      <OutcomeCredits
+        outcome={
+          <p className="leading-[1.35]">
+            Shipped a unified theming system across Outlook, replacing fragmented banner-based
+            customization with one architecture. It let people make the product their own while
+            keeping the clarity and focus they rely on, and gave partner teams a system they could
+            extend.
+          </p>
+        }
         contributions="Cross-platform UX lead, cross-product alignment, visual system components and libraries"
         credits="Alexis Copeland, Tati Astua, Yulia M, Horacio G, Pedro Leitin, BUCK Design, Christina Ergonis, Coin Moll"
       />

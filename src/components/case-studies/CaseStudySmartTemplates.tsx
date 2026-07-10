@@ -5,7 +5,7 @@
    only on Problem / Approach / Outcome / Credits / My contributions. Commentary
    captions run as plain body text. Copy in portfolio voice (see VOICE.md). */
 
-import { MarginRow, CreditsRow } from "./blocks";
+import { MarginRow, OutcomeCredits } from "./blocks";
 
 const BASE = "/projects/smart-templates/case-study";
 
@@ -165,17 +165,15 @@ export default function CaseStudySmartTemplates() {
       {/* Full-width image */}
       <FullWidth src={`${BASE}/wide-3.webp`} />
 
-      {/* Outcome — margin label + right column */}
-      <MarginRow label="Outcome">
-        <p className="leading-[1.35]">
-          Shipped 10+ smart templates to Microsoft 365, across health, education, planning, and
-          lifestyle. They turned the blank page into a running start for people, and gave partner
-          teams a system they could keep building on.
-        </p>
-      </MarginRow>
-
-      {/* Credits + My contributions */}
-      <CreditsRow
+      {/* Outcome + credits — one container */}
+      <OutcomeCredits
+        outcome={
+          <p className="leading-[1.35]">
+            Shipped 10+ smart templates to Microsoft 365, across health, education, planning, and
+            lifestyle. They turned the blank page into a running start for people, and gave partner
+            teams a system they could keep building on.
+          </p>
+        }
         contributions={"Web & mobile UX, Interaction design, Visual design"}
         credits="Christian Canton, Sam Radkovitz, Alex Malkievicz"
       />

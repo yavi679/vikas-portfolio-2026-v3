@@ -24,9 +24,9 @@ interface ProjectNavProps {
    recedes in 3D (perspective + translateZ) and tucks BEHIND the next card
    (later cards paint in front via ascending z-index). Scrubbed per scroll frame. */
 
-const PERSP = 1500; // per-card perspective (px); origin set per side so each end recedes toward its own edge
+const PERSP = 1000; // per-card perspective (px); origin set per side so each end recedes toward its own edge
 const RANGE = 200; // px of scroll over which a passed card fully recedes
-const DEPTH = 1200; // px pushed back in 3D at full recede (~0.55 apparent scale)
+const DEPTH = 600; // px pushed back in 3D at full recede (~0.55 apparent scale)
 const PEEK = 6; // px each stacked card lifts above the one in front (fan)
 
 export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {

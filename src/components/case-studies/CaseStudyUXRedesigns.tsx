@@ -3,7 +3,7 @@
 /* Based on Figma node 676:1331 — "UX Redesigns" case study (refined layout).
    Copy is written in portfolio voice (see VOICE.md). */
 
-import { MarginRow, Feat, CreditsRow } from "./blocks";
+import { MarginRow, Feat, OutcomeCredits } from "./blocks";
 
 const BASE = "/projects/ux-redesigns/case-study";
 
@@ -149,17 +149,15 @@ export default function CaseStudyUXRedesigns() {
       {/* Pair — Max mode + Onboarding */}
       <Pair a={`${BASE}/pair3-a.mp4`} b={`${BASE}/pair3-b.mp4`} height={630} />
 
-      {/* Outcome — margin label + right column */}
-      <MarginRow label="Outcome">
-        <p className="leading-[1.35]">
-          Shipped redesigned sorting, filtering, and shortcut systems on Excel for the web. They made
-          everyday actions more approachable for new users while keeping the depth power users rely
-          on.
-        </p>
-      </MarginRow>
-
-      {/* Credits + My contributions */}
-      <CreditsRow
+      {/* Outcome + credits — one container */}
+      <OutcomeCredits
+        outcome={
+          <p className="leading-[1.35]">
+            Shipped redesigned sorting, filtering, and shortcut systems on Excel for the web. They made
+            everyday actions more approachable for new users while keeping the depth power users rely
+            on.
+          </p>
+        }
         contributions="Web UX, Interaction design, Visual design"
         credits="Christian Canton, Alex Malkievicz, Jessie Xue"
       />

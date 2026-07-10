@@ -4,7 +4,7 @@
    Copy written in portfolio voice (see VOICE.md). */
 
 import VideoHero from "@/components/VideoHero";
-import { MarginRow, Feat, CreditsRow } from "./blocks";
+import { MarginRow, Feat, OutcomeCredits } from "./blocks";
 
 const BASE = "/projects/generative-sfx/case-study";
 
@@ -111,20 +111,20 @@ export default function CaseStudyGenerativeSFX() {
       {/* Full-width — editor across surfaces */}
       <img className="w-full aspect-[1120/620] rounded-2xl object-cover border border-gray-900" src={`${BASE}/shot-4.webp`} alt="" />
 
-      {/* Outcome — margin label + right column */}
-      <MarginRow label="Outcome">
-        <p className="leading-[1.35]">
-          Shipped a generative SFX editor on desktop and mobile web, letting creators score sound
-          directly onto video.
-        </p>
-        <p className="leading-[1.35]">
-          The interaction patterns now feed Firefly&apos;s video work and are shaping roadmap
-          priorities across Express and Premiere.
-        </p>
-      </MarginRow>
-
-      {/* Credits + My contributions */}
-      <CreditsRow
+      {/* Outcome + credits — one container */}
+      <OutcomeCredits
+        outcome={
+          <>
+            <p className="leading-[1.35]">
+              Shipped a generative SFX editor on desktop and mobile web, letting creators score sound
+              directly onto video.
+            </p>
+            <p className="leading-[1.35]">
+              The interaction patterns now feed Firefly&apos;s video work and are shaping roadmap
+              priorities across Express and Premiere.
+            </p>
+          </>
+        }
         contributions="Web & mobile web UX, Interaction design, Creative production"
         credits="Justin Salomon, Prannoy Mittal, Rahul Gupta, Eshani Pendsey, Sarah Shen, Oriol Nieto"
       />
