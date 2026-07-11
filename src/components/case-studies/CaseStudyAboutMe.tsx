@@ -6,21 +6,80 @@
 
 import { useState, useEffect } from "react";
 import LiquidSlideshow from "./LiquidSlideshow";
+import GradientBackdrop, { type GBlob } from "@/components/GradientBackdrop";
+import { useGradientParams, blobsFor } from "@/components/GradientControls";
+import { useMeshParams } from "@/components/MeshGradientControls";
+
+/* Opens the gradient editor for a region (and closes the wordmark Remix panel).
+   Styled like the nav Remix pill; sits in the box's top-left corner. */
+function EditButton({ id }: { id: string }) {
+  const { openEditor } = useGradientParams();
+  const { setOpen: setMeshOpen } = useMeshParams();
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        setMeshOpen(false);
+        openEditor(id);
+      }}
+      className="absolute left-[4px] top-[4px] z-20 flex h-9 items-center rounded-full bg-[#333] px-4 text-[#b3b3b3] transition-all hover:bg-[#4d4d4d] hover:text-[#e6e6e6]"
+      style={{ fontSize: "1rem", letterSpacing: "-0.16px", lineHeight: 1.35 }}
+    >
+      Edit
+    </button>
+  );
+}
 
 /* Light display statement (42px in Figma → 2.625rem at this project's 14px root). */
 const STMT = { color: "#e6e6e6", fontSize: "2.625rem", fontWeight: 300, letterSpacing: "-0.84px", lineHeight: 1.1 } as const;
 const META = { color: "#e6e6e6", fontSize: "1rem", letterSpacing: "-0.48px" } as const;
 const BODY = { color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" } as const;
 
-/* A display statement on its own filled panel, centered reading column. */
-function Statement({ children }: { children: React.ReactNode }) {
+/* A display statement on its own filled panel, centered reading column.
+   `backdrop` layers the Gradient 1 bloom behind the text (used for the header). */
+function Statement({
+  children,
+  backdrop = false,
+  blobs,
+  editId,
+}: {
+  children: React.ReactNode;
+  backdrop?: boolean;
+  blobs?: GBlob[];
+  editId?: string;
+}) {
   return (
     <div
-      className="flex w-full justify-center rounded-2xl"
+      className="relative flex w-full justify-center overflow-hidden rounded-2xl"
       style={{ background: "#1a1a1a", padding: 200 }}
     >
-      <p className="w-full" style={{ ...STMT, maxWidth: 700 }}>
+      {backdrop && <GradientBackdrop blobs={blobs} />}
+      {editId && <EditButton id={editId} />}
+      <p className="relative z-10 w-full" style={{ ...STMT, maxWidth: 700 }}>
         {children}
+      </p>
+    </div>
+  );
+}
+
+/* Intro header — the display statement over its own editable Gradient 1 bloom. */
+function IntroHeader() {
+  const { gradients } = useGradientParams();
+  return (
+    <div
+      className="relative flex w-full justify-center overflow-hidden rounded-2xl"
+      style={{ background: "#1a1a1a", padding: 200 }}
+    >
+      <GradientBackdrop blobs={blobsFor(gradients, "intro")} />
+      <EditButton id="intro" />
+      <p className="relative z-10 w-full" style={{ ...STMT, maxWidth: 700 }}>
+        <img
+          src={`${MEDIA}/waving-hand.webp`}
+          alt="waving hand"
+          className="mr-2 inline-block"
+          style={{ width: "1em", height: "1em", verticalAlign: "-0.12em" }}
+        />
+        I&apos;m Vikas. I believe good design listens to people and speaks back with clarity.
       </p>
     </div>
   );
@@ -176,40 +235,37 @@ const HERO_IMAGES = Array.from({ length: 10 }, (_, i) => `${MEDIA}/interest-${i 
 const LOGOS = "/projects/app-logos";
 
 export default function CaseStudyAboutMe() {
+  const { gradients } = useGradientParams();
   return (
     <div className="flex flex-col gap-[4px] items-center w-full">
-      {/* Intro */}
-      <Statement>
-        <img
-          src={`${MEDIA}/waving-hand.webp`}
-          alt="waving hand"
-          className="mr-2 inline-block"
-          style={{ width: "1em", height: "1em", verticalAlign: "-0.12em" }}
-        />
-        I&apos;m Vikas. I believe good design listens to people and speaks back with clarity.
-      </Statement>
+      {/* Intro — editable gradient header */}
+      <IntroHeader />
 
       {/* Top — inspiration line (left) beside the interests hero/slideshow (right) */}
       <div className="flex w-full gap-[4px] aspect-[1120/630]">
         <div
-          className="flex items-center min-w-px rounded-2xl"
+          className="relative flex items-center min-w-px overflow-hidden rounded-2xl"
           style={{ width: "calc(50% - 2px)", background: "#1a1a1a", paddingLeft: 90, paddingRight: 90 }}
         >
-          <p style={STMT}>I look for things in the world that make my heart go 💗</p>
+          <GradientBackdrop blobs={blobsFor(gradients, "inspiration")} />
+          <EditButton id="inspiration" />
+          <p className="relative z-10" style={STMT}>I look for things in the world that make my heart go 💗</p>
         </div>
         {/* Hero — liquid-distortion slideshow of personal interests */}
         <LiquidSlideshow images={HERO_IMAGES} dmap={`${MEDIA}/dmap-clouds.jpg`} interval={9600} />
       </div>
 
       {/* Experience — quote + 2x2 cards combined in one rounded panel */}
-      <div className="flex w-full flex-col gap-[4px] rounded-[32px]" style={{ background: "#1a1a1a" }}>
-        <div className="flex w-full items-center justify-center" style={{ padding: 200 }}>
+      <div className="relative flex w-full flex-col gap-[4px] overflow-hidden rounded-[32px]" style={{ background: "#1a1a1a" }}>
+        <GradientBackdrop blobs={blobsFor(gradients, "experience")} />
+        <EditButton id="experience" />
+        <div className="relative z-10 flex w-full items-center justify-center" style={{ padding: 200 }}>
           <p className="w-full" style={{ ...STMT, maxWidth: 700 }}>
             Something about 8yrs of experience, working with people, love making tools for people.
           </p>
         </div>
         <div
-          className="grid grid-cols-2 items-stretch gap-[40px] w-full"
+          className="relative z-10 grid grid-cols-2 items-stretch gap-[40px] w-full"
           style={{ paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }}
         >
         <ExpCard logo={`${LOGOS}/adobe-firefly.webp`} company="Adobe Firefly" years="2023, 2026" role="Product designer, GenAI">
@@ -232,7 +288,7 @@ export default function CaseStudyAboutMe() {
       </div>
 
       {/* What inspires me */}
-      <Statement>
+      <Statement backdrop editId="inspires" blobs={blobsFor(gradients, "inspires")}>
         I came to product design from architecture, chasing the same things: texture, light, and the way nature
         holds them. These are my attempts to observe those closely, then bend them towards play.
       </Statement>

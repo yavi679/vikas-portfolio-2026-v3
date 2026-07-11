@@ -118,6 +118,23 @@ export const projectGroups: CompanyGroup[] = [
     ],
   },
   {
+    company: "ROPE",
+    logoUrl: "/projects/rope/logo.webp",
+    role: "Design partner",
+    years: "2022, 2024",
+    description: "Design and brand work for friends' small businesses.",
+    projects: [
+      {
+        id: "rope",
+        title: "ROPE",
+        year: "2022, 2024",
+        hook: "My 5-to-9: design and brand work to help friends' businesses take off.",
+        description: "",
+        details: {},
+      },
+    ],
+  },
+  {
     company: "Microsoft Outlook",
     logoUrl: "/projects/app-logos/microsoft-outlook.webp",
     role: "Product Designer",
@@ -198,23 +215,6 @@ export const projectGroups: CompanyGroup[] = [
           approach: "Focused on simplifying complexity without removing power.\n\nRedefined key interaction systems:\n• improved defaults and clarity for sorting and filtering workflows\n• contextual, web-native interaction patterns for discoverability\n• reimagined keyboard shortcuts as both efficiency tools and a way to orient users within product structure\n\nBalanced modernization with familiarity ensuring transitions from desktop to web remained intuitive.",
           outcome: "Shipped redesigned sorting, filtering, and shortcut systems on Excel web.\n\nImproved usability and approachability while preserving the depth and flexibility expected from a power tool.",
         },
-      },
-    ],
-  },
-  {
-    company: "ROPE",
-    logoUrl: "/projects/rope/logo.webp",
-    role: "Design partner",
-    years: "2022, 2024",
-    description: "Design and brand work for friends' small businesses.",
-    projects: [
-      {
-        id: "rope",
-        title: "ROPE",
-        year: "2022, 2024",
-        hook: "2 lines about ROPE",
-        description: "",
-        details: {},
       },
     ],
   },

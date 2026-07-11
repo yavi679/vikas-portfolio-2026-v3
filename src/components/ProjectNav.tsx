@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { getNavProjects, getProjectGroup } from "@/lib/projects";
 import { useMeshParams, MeshGradientControlPanel } from "@/components/MeshGradientControls";
+import { useGradientParams, GradientControlPanel } from "@/components/GradientControls";
 
 /* Paper Shaders animated mesh gradient behind the wordmark. Canvas/WebGL,
    so load client-only (the #1a1a1a panel shows until it mounts). */
@@ -31,7 +32,13 @@ const PEEK = 6; // px each stacked card lifts above the one in front (fan)
 
 export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
   const { params, open, setOpen } = useMeshParams();
+  const { editing, close: closeGradient } = useGradientParams();
   const [everOpened, setEverOpened] = useState(false); // gate the cards' re-entry animation to closes only
+
+  // Cards animate back in from the bottom after either panel has been opened.
+  useEffect(() => {
+    if (open || editing) setEverOpened(true);
+  }, [open, editing]);
   const scrollerRef = useRef<HTMLElement>(null);
   const wordmarkRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -113,7 +120,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            if (!open) setEverOpened(true);
+            if (!open) closeGradient();
             setOpen((o) => !o);
           }}
           className={`absolute left-[4px] top-[4px] z-20 flex h-9 items-center rounded-full bg-[#333] px-4 text-[#b3b3b3] transition-all hover:bg-[#4d4d4d] hover:text-[#e6e6e6] ${
@@ -140,9 +147,11 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
           <MeshGradient className="absolute inset-0" width="100%" height="100%" {...params} />
         </div>
       </div>
-      {/* Remix open → shader parameters take over the card space; else the cards */}
+      {/* A panel (Remix shader, or the About header gradient) takes over the card
+          space; otherwise the cards. */}
       {open && <MeshGradientControlPanel />}
-      {!open && (
+      {!open && editing && <GradientControlPanel />}
+      {!open && !editing && (
         <div
           className={`flex w-full flex-col gap-[4px] ${
             everOpened ? "duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] animate-in fade-in slide-in-from-bottom-[40px]" : ""

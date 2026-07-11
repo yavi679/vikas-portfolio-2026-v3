@@ -37,7 +37,7 @@ export type MeshParams = {
 };
 
 export const DEFAULT_PARAMS: MeshParams = {
-  colors: ["#dedede", "#a6c412", "#3399cc"],
+  colors: ["#bababa", "#464646", "#ffffff"],
   distortion: 1,
   swirl: 0.38,
   grainMixer: 0.36,
