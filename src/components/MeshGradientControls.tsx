@@ -13,7 +13,8 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw } from "@/components/animate-ui/icons/rotate-ccw";
+import { AnimateIcon } from "@/components/animate-ui/icons/icon";
 import { Slider } from "@/components/ui/slider";
 import { Stepper } from "@/components/shader-panel/Stepper";
 import { ColorPicker } from "@/components/shader-panel/ColorPicker";
@@ -187,14 +188,16 @@ export function MeshGradientControlPanel() {
         >
           {copied ? "Copied!" : "Copy code"}
         </button>
-        <button
-          type="button"
-          aria-label="reset"
-          onClick={reset}
-          className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-[#333] text-[#b3b3b3] transition-colors hover:bg-[#0d0d0d]"
-        >
-          <RotateCcw className="size-4" />
-        </button>
+        <AnimateIcon animateOnHover asChild>
+          <button
+            type="button"
+            aria-label="reset"
+            onClick={reset}
+            className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-[#333] text-[#b3b3b3] transition-colors hover:bg-[#0d0d0d]"
+          >
+            <RotateCcw className="size-4" />
+          </button>
+        </AnimateIcon>
       </div>
       </div>
     </div>

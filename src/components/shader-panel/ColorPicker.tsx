@@ -5,7 +5,9 @@
    spectrum below it. HSV internally, hex out. Starts condensed. */
 
 import { useRef, useState, type PointerEvent as RPointerEvent } from "react";
-import { Pipette, Shrink } from "lucide-react";
+import { Pipette } from "lucide-react";
+import { Shrink } from "@/components/animate-ui/icons/shrink";
+import { AnimateIcon } from "@/components/animate-ui/icons/icon";
 import { hexToHsv, hsvToHex, SPECTRUM } from "./color";
 
 const LABEL = { color: "#808080", fontSize: "1rem", letterSpacing: "-0.16px", lineHeight: 1.35 } as const;
@@ -95,14 +97,16 @@ export function ColorPicker({
             />
           </div>
           {expanded ? (
-            <button
-              type="button"
-              aria-label="collapse color picker"
-              onClick={() => setExpanded(false)}
-              className={`${iconBtn} bg-[#333] text-[#b3b3b3] hover:bg-[#4d4d4d]`}
-            >
-              <Shrink className="size-4" />
-            </button>
+            <AnimateIcon animateOnHover asChild>
+              <button
+                type="button"
+                aria-label="collapse color picker"
+                onClick={() => setExpanded(false)}
+                className={`${iconBtn} bg-[#333] text-[#b3b3b3] hover:bg-[#4d4d4d]`}
+              >
+                <Shrink className="size-4" />
+              </button>
+            </AnimateIcon>
           ) : (
             <button
               type="button"

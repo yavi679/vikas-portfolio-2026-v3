@@ -45,13 +45,13 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
       raf = 0;
       const sTop = scroller.scrollTop;
       const topFocal = wordmarkRef.current?.offsetHeight ?? 0; // top stack pins just under the wordmark
-      const cardH = cardRefs.current[0]?.offsetHeight ?? 0;
-      const bottomFocal = scroller.clientHeight - cardH; // bottom stack pins flush at the bottom edge
       let depthTop = 0;
       let depthBot = 0;
       for (const el of cardRefs.current) {
         if (!el) continue;
         const vp = el.offsetTop - sTop; // card top relative to nav top
+        // per-card: a card is flush at the bottom edge when its own bottom hits it
+        const bottomFocal = scroller.clientHeight - el.offsetHeight;
         if (vp < topFocal) {
           // above the top line → recede up into the stack
           const past = topFocal - vp;

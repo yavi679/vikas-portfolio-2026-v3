@@ -4,7 +4,9 @@
    Revised layout: all text boxes are 1 column wide and hug content. */
 
 import { useState, useEffect } from "react";
-import { Sun, Moon } from "lucide-react";
+import { Sun } from "@/components/animate-ui/icons/sun";
+import { Moon } from "@/components/animate-ui/icons/moon";
+import { AnimateIcon } from "@/components/animate-ui/icons/icon";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { MarginRow, Feat, OutcomeCredits } from "./blocks";
 
@@ -203,8 +205,8 @@ function ThemeShowcase() {
       {/* showcase image — crossfades between options/modes */}
       <ShowcaseImage src={src} alt={`${tab.label} theme`} baseSrc={baseSrc} placeholder={placeholder} />
 
-      {/* tab controller — bottom-left overlay, 10px inset */}
-      <div className="absolute z-10" style={{ left: 8, bottom: 8 }}>
+      {/* tab controller — bottom-left overlay, 4px inset */}
+      <div className="absolute z-10" style={{ left: 4, bottom: 4 }}>
         {/* anchor is the tabs pill only; the picker is positioned off its right edge */}
         <div className="relative inline-flex items-center">
           {/* per-tab picker — sits BEHIND the tabs (lower z) and slides out from
@@ -215,7 +217,7 @@ function ThemeShowcase() {
               style={{
                 marginLeft: 8,
                 background: ui.pill,
-                padding: 4,
+                padding: 2,
                 borderRadius: pickerTab.radius,
                 transform: showPicker ? "translateX(0)" : "translateX(calc(-100% - 12px))",
                 opacity: showPicker ? 1 : 0,
@@ -241,7 +243,7 @@ function ThemeShowcase() {
                           aria-label={o.label}
                           style={{
                             width: 52,
-                            height: 29,
+                            height: 28,
                             borderRadius: 7,
                             background: o.swatch ?? o.gradient ?? undefined,
                             backgroundImage: o.thumb ? `url(${o.thumb})` : o.gradient,
@@ -258,7 +260,7 @@ function ThemeShowcase() {
           </TooltipProvider>
 
           {/* theme tabs — on top, opaque, so the picker reads as emerging from behind */}
-          <div className="relative z-10 flex gap-1 items-center rounded-full" style={{ background: ui.pill, padding: 4 }}>
+          <div className="relative z-10 flex gap-1 items-center rounded-full" style={{ background: ui.pill, padding: 2 }}>
             {TABS.map((t) => {
               const active = t.value === theme;
               return (
@@ -269,8 +271,9 @@ function ThemeShowcase() {
                     active ? "" : `text-[#808080] ${hoverText}`
                   }`}
                   style={{
-                    paddingTop: 4,
-                    paddingBottom: 6,
+                    height: 28,
+                    display: "flex",
+                    alignItems: "center",
                     paddingLeft: 16,
                     paddingRight: 16,
                     fontSize: "1rem",
@@ -284,19 +287,21 @@ function ThemeShowcase() {
               );
             })}
             {/* mode toggle — inside the tabs pill */}
-            <button
-              onClick={() => setMode((m) => (m === "dark" ? "light" : "dark"))}
-              className="flex items-center justify-center rounded-full cursor-pointer transition shrink-0 opacity-80 hover:opacity-100"
-              style={{
-                background: ui.toggleBg,
-                width: 36,
-                height: 29,
-                color: ui.toggleIcon,
-              }}
-              aria-label={mode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {mode === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+            <AnimateIcon animateOnHover asChild>
+              <button
+                onClick={() => setMode((m) => (m === "dark" ? "light" : "dark"))}
+                className="flex items-center justify-center rounded-full cursor-pointer transition shrink-0 opacity-80 hover:opacity-100"
+                style={{
+                  background: ui.toggleBg,
+                  width: 36,
+                  height: 28,
+                  color: ui.toggleIcon,
+                }}
+                aria-label={mode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                {mode === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+            </AnimateIcon>
           </div>
         </div>
       </div>

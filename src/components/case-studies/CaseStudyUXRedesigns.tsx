@@ -3,6 +3,7 @@
 /* Based on Figma node 676:1331 — "UX Redesigns" case study (refined layout).
    Copy is written in portfolio voice (see VOICE.md). */
 
+import AutoplayVideo from "@/components/AutoplayVideo";
 import { MarginRow, Feat, OutcomeCredits } from "./blocks";
 
 const BASE = "/projects/ux-redesigns/case-study";
@@ -13,7 +14,9 @@ function Media({ src, className = "" }: { src: string; className?: string }) {
   const cls = `rounded-2xl object-contain border border-gray-900 ${className}`;
   const style = { background: "#fff" } as const;
   return src.endsWith(".mp4") ? (
-    <video className={cls} style={style} src={src} autoPlay muted loop playsInline />
+    <div className={`relative overflow-hidden rounded-2xl border border-gray-900 ${className}`} style={style}>
+      <AutoplayVideo className="h-full w-full object-contain" src={src} />
+    </div>
   ) : (
     <img className={cls} style={style} src={src} alt="" />
   );
@@ -34,14 +37,7 @@ export default function CaseStudyUXRedesigns() {
     <div className="flex flex-col gap-[4px] items-center w-full">
       {/* Hero */}
       <div className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>
-        <video
-          className="w-full h-full object-cover"
-          src="/projects/ux-redesigns/01-Core-feature-redesigns.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
+        <AutoplayVideo className="w-full h-full object-cover" src="/projects/ux-redesigns/01-Core-feature-redesigns.mp4" />
       </div>
 
       {/* Problem — margin label + right column */}
@@ -85,14 +81,9 @@ export default function CaseStudyUXRedesigns() {
       </MarginRow>
 
       {/* Full-width video — sort/filter by color */}
-      <video
-        className="w-full aspect-video rounded-2xl object-cover border border-gray-900"
-        src={`${BASE}/sort-by-color.mp4`}
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
+      <div className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-900">
+        <AutoplayVideo className="w-full h-full object-cover" src={`${BASE}/sort-by-color.mp4`} />
+      </div>
 
       {/* Share shortcuts — right column */}
       <MarginRow>
@@ -122,14 +113,9 @@ export default function CaseStudyUXRedesigns() {
       </MarginRow>
 
       {/* Full-width video — sort/filter by number */}
-      <video
-        className="w-full aspect-video rounded-2xl object-cover border border-gray-900"
-        src={`${BASE}/sort-by-number.mp4`}
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
+      <div className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-900">
+        <AutoplayVideo className="w-full h-full object-cover" src={`${BASE}/sort-by-number.mp4`} />
+      </div>
 
       {/* Max mode — right column */}
       <MarginRow>

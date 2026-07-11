@@ -5,6 +5,7 @@
    only on Problem / Approach / Outcome / Credits / My contributions. Commentary
    captions run as plain body text. Copy in portfolio voice (see VOICE.md). */
 
+import AutoplayVideo from "@/components/AutoplayVideo";
 import { MarginRow, OutcomeCredits } from "./blocks";
 
 const BASE = "/projects/smart-templates/case-study";
@@ -24,7 +25,9 @@ function FullWidth({
   const cls = "w-full rounded-2xl border border-gray-900";
   const style = { background: "#000", aspectRatio: aspect, objectFit: fit } as const;
   return src.endsWith(".mp4") ? (
-    <video className={cls} style={style} src={src} autoPlay muted loop playsInline />
+    <div className={`${cls} relative overflow-hidden`} style={{ background: "#000", aspectRatio: aspect }}>
+      <AutoplayVideo className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"}`} src={src} />
+    </div>
   ) : (
     <img className={cls} style={style} src={src} alt="" />
   );
@@ -68,14 +71,7 @@ export default function CaseStudySmartTemplates() {
     <div className="flex flex-col gap-[4px] items-center w-full">
       {/* Hero */}
       <div className="w-full aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>
-        <video
-          className="w-full h-full object-cover"
-          src="/projects/smart-templates/01-Excel-x-Wolfram-templates.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
+        <AutoplayVideo className="w-full h-full object-cover" src="/projects/smart-templates/01-Excel-x-Wolfram-templates.mp4" />
       </div>
 
       {/* Problem — margin label + right column */}

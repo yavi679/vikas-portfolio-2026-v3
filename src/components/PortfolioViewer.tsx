@@ -12,6 +12,7 @@ import CaseStudySmartTemplates from "@/components/case-studies/CaseStudySmartTem
 import CaseStudyUXRedesigns from "@/components/case-studies/CaseStudyUXRedesigns";
 import CaseStudyGenerativeSFX from "@/components/case-studies/CaseStudyGenerativeSFX";
 import CaseStudyGenerativeSpeech from "@/components/case-studies/CaseStudyGenerativeSpeech";
+import CaseStudyRope from "@/components/case-studies/CaseStudyRope";
 
 /* Full-bleed gradient preview (the shader without the wordmark mask). */
 const MeshGradient = dynamic(
@@ -27,6 +28,7 @@ const caseStudies: Record<string, React.ComponentType> = {
   "expressive-theming": CaseStudyExpressiveTheming,
   "smart-templates": CaseStudySmartTemplates,
   "ux-redesigns": CaseStudyUXRedesigns,
+  rope: CaseStudyRope,
 };
 
 const allProjects = getNavProjects();

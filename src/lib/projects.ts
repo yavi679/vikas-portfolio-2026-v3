@@ -201,6 +201,23 @@ export const projectGroups: CompanyGroup[] = [
       },
     ],
   },
+  {
+    company: "ROPE",
+    logoUrl: "/projects/rope/logo.webp",
+    role: "Design partner",
+    years: "2022, 2024",
+    description: "Design and brand work for friends' small businesses.",
+    projects: [
+      {
+        id: "rope",
+        title: "ROPE",
+        year: "2022, 2024",
+        hook: "2 lines about ROPE",
+        description: "",
+        details: {},
+      },
+    ],
+  },
 ];
 
 /* Standalone "About Me" entry — not tied to a company group. */
