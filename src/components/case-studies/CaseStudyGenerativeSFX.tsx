@@ -6,12 +6,7 @@
 import { useEffect, useRef, useState } from "react";
 import VideoHero from "@/components/VideoHero";
 import { MarginRow, Feat, OutcomeCredits, LABEL } from "./blocks";
-import { Play } from "@/components/animate-ui/icons/play";
-import { Pause } from "@/components/animate-ui/icons/pause";
-import { Volume2 } from "@/components/animate-ui/icons/volume-2";
-import { VolumeOff } from "@/components/animate-ui/icons/volume-off";
-import { AnimateIcon } from "@/components/animate-ui/icons/icon";
-import { Rim } from "@/components/VideoRim";
+import { VideoControl } from "@/components/VideoRim";
 
 const BASE = "/projects/generative-sfx/case-study";
 
@@ -71,7 +66,6 @@ function Showcase({
     setMuted(next);
   };
 
-  const seg = "flex items-center justify-center rounded-full cursor-pointer";
   return (
     <div
       className={`relative flex h-full flex-col items-center justify-center gap-3 rounded-2xl overflow-hidden border border-gray-900 ${className}`}
@@ -113,34 +107,19 @@ function Showcase({
         </p>
       )}
       {video && (
-        <div className="absolute bottom-[4px] right-[4px] z-10 flex items-center gap-[12px]">
+        <div className="absolute bottom-[4px] right-[4px] z-10 flex items-end gap-[12px]">
           {caption && (
             <span className="leading-[1.35] whitespace-nowrap" style={LABEL}>
               {caption}
             </span>
           )}
-          <div className="opacity-80 transition-opacity hover:opacity-100">
-            <Rim progress={progress}>
-              <div className="flex items-center gap-[2px] rounded-full bg-[#1a1a1a] p-[2px]">
-                <AnimateIcon animateOnHover asChild>
-                  <button type="button" onClick={togglePlay} aria-label={playing ? "Pause" : "Play"} className={`${seg} h-8 w-9`}>
-                    {playing ? <Pause size={16} color="#e6e6e6" /> : <Play size={16} color="#e6e6e6" />}
-                  </button>
-                </AnimateIcon>
-                <AnimateIcon animateOnHover asChild>
-                  <button
-                    type="button"
-                    onClick={toggleMute}
-                    aria-label={muted ? "Unmute" : "Mute"}
-                    className={`${seg} h-8 w-9`}
-                    style={{ background: muted ? "#370000" : "transparent" }}
-                  >
-                    {muted ? <VolumeOff size={20} color="#e6e6e6" /> : <Volume2 size={20} color="#e6e6e6" />}
-                  </button>
-                </AnimateIcon>
-              </div>
-            </Rim>
-          </div>
+          <VideoControl
+            playing={playing}
+            progress={progress}
+            onTogglePlay={togglePlay}
+            muted={muted}
+            onToggleMute={toggleMute}
+          />
         </div>
       )}
     </div>

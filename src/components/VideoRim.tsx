@@ -1,6 +1,12 @@
 "use client";
 
 import { useRef, useState, useEffect, type ReactNode } from "react";
+import { Play } from "@/components/animate-ui/icons/play";
+import { Pause } from "@/components/animate-ui/icons/pause";
+import { Volume2 } from "@/components/animate-ui/icons/volume-2";
+import { VolumeOff } from "@/components/animate-ui/icons/volume-off";
+import { AnimateIcon } from "@/components/animate-ui/icons/icon";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
 /* A duration rim that traces the control's rounded outline (circle for a square
    child, stadium for a wide one) and fills with playback progress. One rounded
@@ -64,5 +70,70 @@ export function Rim({ progress, children }: { progress: number; children: ReactN
         </svg>
       )}
     </div>
+  );
+}
+
+/* The project's standard video control: a circular play/pause wrapped in the
+   duration Rim (consistent everywhere), plus an optional mute/unmute button 4px
+   to its right — pass `onToggleMute` to include it. */
+export function VideoControl({
+  playing,
+  onTogglePlay,
+  progress,
+  muted,
+  onToggleMute,
+}: {
+  playing: boolean;
+  onTogglePlay: () => void;
+  progress: number;
+  muted?: boolean;
+  onToggleMute?: () => void;
+}) {
+  const seg = "flex size-8 cursor-pointer items-center justify-center rounded-full";
+  return (
+    <TooltipProvider delay={500}>
+      <div className="flex flex-col items-center gap-[4px]">
+        {onToggleMute && (
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <div className="rounded-full bg-[#1a1a1a] p-[2px] opacity-60 transition-opacity hover:opacity-100">
+                  <AnimateIcon animateOnHover asChild>
+                    <button
+                      type="button"
+                      onClick={onToggleMute}
+                      aria-label={muted ? "Unmute" : "Mute"}
+                      className={seg}
+                      style={{ background: muted ? "transparent" : "#370000" }}
+                    >
+                      {muted ? <Volume2 size={20} color="#e6e6e6" /> : <VolumeOff size={20} color="#e6e6e6" />}
+                    </button>
+                  </AnimateIcon>
+                </div>
+              }
+            />
+            <TooltipContent>{muted ? "Unmute" : "Mute"}</TooltipContent>
+          </Tooltip>
+        )}
+        <div className="inline-flex opacity-60 transition-opacity hover:opacity-100">
+          <Rim progress={progress}>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <div className="rounded-full bg-[#1a1a1a] p-[2px]">
+                    <AnimateIcon animateOnHover asChild>
+                      <button type="button" onClick={onTogglePlay} aria-label={playing ? "Pause" : "Play"} className={seg}>
+                        {playing ? <Pause size={16} color="#e6e6e6" /> : <Play size={16} color="#e6e6e6" />}
+                      </button>
+                    </AnimateIcon>
+                  </div>
+                }
+              />
+              <TooltipContent>{playing ? "Pause" : "Play"}</TooltipContent>
+            </Tooltip>
+          </Rim>
+        </div>
+      </div>
+    </TooltipProvider>
   );
 }

@@ -1,12 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { Play } from "@/components/animate-ui/icons/play";
-import { Pause } from "@/components/animate-ui/icons/pause";
-import { Volume2 } from "@/components/animate-ui/icons/volume-2";
-import { VolumeOff } from "@/components/animate-ui/icons/volume-off";
-import { AnimateIcon } from "@/components/animate-ui/icons/icon";
-import { Rim } from "@/components/VideoRim";
+import { VideoControl } from "@/components/VideoRim";
 
 /* Hero video with a duration-rim control (Figma 747:866). The rim shows playback
    progress; the center button plays/pauses. With `hasAudio`, a mute/unmute segment
@@ -54,13 +49,6 @@ export default function VideoHero({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasAudio]);
 
-  const seg = "flex items-center justify-center rounded-full cursor-pointer";
-  const playIcon = playing ? (
-    <Pause size={16} color="#e6e6e6" />
-  ) : (
-    <Play size={16} color="#e6e6e6" />
-  );
-
   return (
     <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-gray-900" style={{ background: "#1a1a1a" }}>
       <video
@@ -79,37 +67,14 @@ export default function VideoHero({
         }}
       />
 
-      <div className="absolute bottom-[4px] right-[4px] z-10 opacity-80 transition-opacity hover:opacity-100">
-        <Rim progress={progress}>
-          {hasAudio ? (
-            <div className="flex items-center gap-[2px] rounded-full bg-[#1a1a1a] p-[2px]">
-              <AnimateIcon animateOnHover asChild>
-                <button type="button" onClick={togglePlay} aria-label={playing ? "Pause" : "Play"} className={`${seg} h-8 w-9`}>
-                  {playIcon}
-                </button>
-              </AnimateIcon>
-              <AnimateIcon animateOnHover asChild>
-                <button
-                  type="button"
-                  onClick={toggleMute}
-                  aria-label={muted ? "Unmute" : "Mute"}
-                  className={`${seg} h-8 w-9`}
-                  style={{ background: muted ? "#370000" : "transparent" }}
-                >
-                  {muted ? <VolumeOff size={20} color="#e6e6e6" /> : <Volume2 size={20} color="#e6e6e6" />}
-                </button>
-              </AnimateIcon>
-            </div>
-          ) : (
-            <div className="rounded-full bg-[#1a1a1a] p-[2px]">
-              <AnimateIcon animateOnHover asChild>
-                <button type="button" onClick={togglePlay} aria-label={playing ? "Pause" : "Play"} className={`${seg} size-8`}>
-                  {playIcon}
-                </button>
-              </AnimateIcon>
-            </div>
-          )}
-        </Rim>
+      <div className="absolute bottom-[4px] right-[4px] z-10">
+        <VideoControl
+          playing={playing}
+          progress={progress}
+          onTogglePlay={togglePlay}
+          muted={hasAudio ? muted : undefined}
+          onToggleMute={hasAudio ? toggleMute : undefined}
+        />
       </div>
     </div>
   );

@@ -4,10 +4,7 @@
    (IntersectionObserver), with a play/pause + duration-rim control bottom-right. */
 
 import { useEffect, useRef, useState } from "react";
-import { Play } from "@/components/animate-ui/icons/play";
-import { Pause } from "@/components/animate-ui/icons/pause";
-import { AnimateIcon } from "@/components/animate-ui/icons/icon";
-import { Rim } from "@/components/VideoRim";
+import { VideoControl } from "@/components/VideoRim";
 
 export default function AutoplayVideo({
   src,
@@ -61,21 +58,8 @@ export default function AutoplayVideo({
         }}
       />
 
-      <div className="absolute bottom-[4px] right-[4px] z-10 opacity-80 transition-opacity hover:opacity-100">
-        <Rim progress={progress}>
-          <div className="rounded-full bg-[#1a1a1a] p-[2px]">
-            <AnimateIcon animateOnHover asChild>
-              <button
-                type="button"
-                onClick={togglePlay}
-                aria-label={playing ? "Pause" : "Play"}
-                className="flex size-8 cursor-pointer items-center justify-center rounded-full"
-              >
-                {playing ? <Pause size={16} color="#e6e6e6" /> : <Play size={16} color="#e6e6e6" />}
-              </button>
-            </AnimateIcon>
-          </div>
-        </Rim>
+      <div className="absolute bottom-[4px] right-[4px] z-10">
+        <VideoControl playing={playing} progress={progress} onTogglePlay={togglePlay} />
       </div>
     </div>
   );
