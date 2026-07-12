@@ -33,6 +33,25 @@ export function Rim({ progress, children }: { progress: number; children: ReactN
   const H = dim.h + 2 * P;
   const rect = { x: (W - rw) / 2, y: (H - rh) / 2, width: rw, height: rh, rx, ry: rx, fill: "none" as const };
 
+  // Progress path starts at the top-center of the pill and traces
+  // counter-clockwise (left first). Works for the stadium and the circle (where
+  // the top straight has zero length).
+  const cx = rect.x + rw / 2;
+  const lx = rect.x + rx;
+  const rxEnd = rect.x + rw - rx;
+  const top = rect.y;
+  const bot = rect.y + rh;
+  const centerPath = `M ${cx} ${top} L ${lx} ${top} A ${rx} ${rx} 0 0 0 ${lx} ${bot} L ${rxEnd} ${bot} A ${rx} ${rx} 0 0 0 ${rxEnd} ${top} Z`;
+
+  const progressProps = {
+    stroke: "#e6e6e6",
+    strokeWidth: STROKE,
+    strokeLinecap: "round" as const,
+    pathLength: 1,
+    strokeDasharray: `${Math.max(progress, 0.0001)} 1`,
+    style: { transition: "stroke-dasharray 0.25s linear" },
+  };
+
   return (
     <div className="relative inline-flex" style={{ padding: P }}>
       <div ref={ref} className="relative z-10 inline-flex">
@@ -41,15 +60,7 @@ export function Rim({ progress, children }: { progress: number; children: ReactN
       {dim.w > 0 && (
         <svg width={W} height={H} className="absolute inset-0 pointer-events-none">
           <rect {...rect} stroke="#ffffff26" strokeWidth={STROKE} />
-          <rect
-            {...rect}
-            stroke="#e6e6e6"
-            strokeWidth={STROKE}
-            strokeLinecap="round"
-            pathLength={1}
-            strokeDasharray={`${Math.max(progress, 0.0001)} 1`}
-            style={{ transition: "stroke-dasharray 0.25s linear" }}
-          />
+          <path d={centerPath} fill="none" {...progressProps} />
         </svg>
       )}
     </div>
