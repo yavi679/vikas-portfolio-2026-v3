@@ -25,6 +25,14 @@ export const DEFAULT_BLOBS: GBlob[] = [
   { color: "#000000", x: -4.5,  y: -7,    w: 87.5,  h: 122.5, blur: 101, round: 0,  glowColor: "#000000", glowSize: 320 },
 ];
 
+/* Blobs render into a layer sized 1/SCALE and then blown back up with a
+   transform. The heavy `blur()`/glow work happens on ~1/SCALE² the pixels
+   (~16× cheaper at SCALE 4) and the upscale is invisible because the result is
+   blurry anyway. Blob %s are relative to the small layer, so positions map back
+   1:1 after scaling; px values (blur/glow/rim/radius) are divided by SCALE so
+   the transform multiplies them back to their intended size. */
+const SCALE = 4;
+
 export default function GradientBackdrop({
   blobs = DEFAULT_BLOBS,
   className = "",
@@ -33,23 +41,37 @@ export default function GradientBackdrop({
   className?: string;
 }) {
   return (
-    <div className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} aria-hidden>
-      {blobs.map((b, i) => (
-        <div
-          key={i}
-          className="absolute"
-          style={{
-            left: `${b.x}%`,
-            top: `${b.y}%`,
-            width: `${b.w}%`,
-            height: `${b.h}%`,
-            background: b.color,
-            borderRadius: b.round,
-            filter: b.blur > 0 ? `blur(${b.blur}px)` : undefined,
-            boxShadow: `inset 0 0 16px 0 #ffffff40, inset 0 0 ${b.glowSize}px 0 ${b.glowColor}`,
-          }}
-        />
-      ))}
+    <div
+      className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+      style={{ contain: "paint" }}
+      aria-hidden
+    >
+      <div
+        className="absolute left-0 top-0"
+        style={{
+          width: `${100 / SCALE}%`,
+          height: `${100 / SCALE}%`,
+          transform: `scale(${SCALE})`,
+          transformOrigin: "top left",
+        }}
+      >
+        {blobs.map((b, i) => (
+          <div
+            key={i}
+            className="absolute"
+            style={{
+              left: `${b.x}%`,
+              top: `${b.y}%`,
+              width: `${b.w}%`,
+              height: `${b.h}%`,
+              background: b.color,
+              borderRadius: b.round / SCALE,
+              filter: b.blur > 0 ? `blur(${b.blur / SCALE}px)` : undefined,
+              boxShadow: `inset 0 0 ${16 / SCALE}px 0 #ffffff40, inset 0 0 ${b.glowSize / SCALE}px 0 ${b.glowColor}`,
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

@@ -4,30 +4,15 @@
    Two big statements framing a grid: the design POV over an experience grid,
    the inspiration over a masonry of personal work. Copy in portfolio voice. */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import LiquidSlideshow from "./LiquidSlideshow";
 import GradientBackdrop, { type GBlob } from "@/components/GradientBackdrop";
 import { useGradientParams, blobsFor } from "@/components/GradientControls";
-import { useMeshParams } from "@/components/MeshGradientControls";
 
-/* Opens the gradient editor for a region (and closes the wordmark Remix panel).
-   Styled like the nav Remix pill; sits in the box's top-left corner. */
-function EditButton({ id }: { id: string }) {
-  const { openEditor } = useGradientParams();
-  const { setOpen: setMeshOpen } = useMeshParams();
-  return (
-    <button
-      type="button"
-      onClick={() => {
-        setMeshOpen(false);
-        openEditor(id);
-      }}
-      className="absolute left-[4px] top-[4px] z-20 flex h-9 items-center rounded-full bg-[#333] px-4 text-[#b3b3b3] transition-all hover:bg-[#4d4d4d] hover:text-[#e6e6e6]"
-      style={{ fontSize: "1rem", letterSpacing: "-0.16px", lineHeight: 1.35 }}
-    >
-      Edit
-    </button>
-  );
+/* Per-region gradient editor toggle. Hidden now that the gradients are dialed in;
+   the editing system stays wired, so returning the button re-enables it. */
+function EditButton(_props: { id: string }) {
+  return null;
 }
 
 /* Light display statement (42px in Figma → 2.625rem at this project's 14px root). */
@@ -171,18 +156,20 @@ function select(rand: boolean): Asset[] {
   });
 }
 
-function Media({ asset }: { asset: Asset }) {
+function Media({ asset, active }: { asset: Asset; active: boolean }) {
+  // Below the fold on load — don't fetch/decode until the masonry scrolls near view.
+  if (!active) return null;
   const cls = "absolute inset-0 w-full h-full object-cover";
   return asset.kind === "video" ? (
-    <video className={cls} src={asset.src} autoPlay muted loop playsInline />
+    <video className={cls} src={asset.src} autoPlay muted loop playsInline preload="metadata" />
   ) : (
-    <img className={cls} src={asset.src} alt="" />
+    <img className={cls} src={asset.src} alt="" loading="lazy" />
   );
 }
 
 /* Crossfades to a new asset: the incoming layer fades in over the current one,
    then becomes current. */
-function Tile({ area, asset, delay }: { area: React.CSSProperties; asset: Asset; delay: number }) {
+function Tile({ area, asset, delay, active }: { area: React.CSSProperties; asset: Asset; delay: number; active: boolean }) {
   const [shown, setShown] = useState(asset);
   const [incoming, setIncoming] = useState<Asset | null>(null);
   useEffect(() => {
@@ -196,34 +183,51 @@ function Tile({ area, asset, delay }: { area: React.CSSProperties; asset: Asset;
   }, [asset, shown.src, delay]);
   return (
     <div className="relative overflow-hidden border border-gray-900" style={{ background: "#1a1a1a", borderRadius: 16, ...area }}>
-      <Media asset={shown} />
+      <Media asset={shown} active={active} />
       {incoming && (
         <div
           className="absolute inset-0 animate-in fade-in duration-300 ease-out"
           style={{ animationDelay: `${delay}ms` }}
         >
-          <Media asset={incoming} />
+          <Media asset={incoming} active={active} />
         </div>
       )}
     </div>
   );
 }
 
-/* Reshuffles every 20s. */
+/* Reshuffles every 20s. Videos/images only load once the grid scrolls near the
+   viewport (it sits well below the fold), so the initial page load stays light. */
 function Masonry() {
   const [sel, setSel] = useState<Asset[]>(() => select(false));
+  const [active, setActive] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    setSel(select(true)); // first randomization once mounted
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setActive(true); // load once, then stay
+      },
+      { rootMargin: "300px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  useEffect(() => {
+    if (!active) return;
+    setSel(select(true)); // first randomization once visible
     const id = setInterval(() => setSel(select(true)), 20000);
     return () => clearInterval(id);
-  }, []);
+  }, [active]);
   return (
     <div
+      ref={ref}
       className="grid gap-[4px] w-full aspect-[280/439]"
       style={{ gridTemplateColumns: "repeat(3, 1fr)", gridTemplateRows: "repeat(5, 1fr)" }}
     >
       {TILES.map((t, i) => (
-        <Tile key={i} area={t.area} asset={sel[i]} delay={i * 40} />
+        <Tile key={i} area={t.area} asset={sel[i]} delay={i * 40} active={active} />
       ))}
     </div>
   );
@@ -256,7 +260,7 @@ export default function CaseStudyAboutMe() {
       </div>
 
       {/* Experience — quote + 2x2 cards combined in one rounded panel */}
-      <div className="relative flex w-full flex-col gap-[4px] overflow-hidden rounded-[32px]" style={{ background: "#1a1a1a" }}>
+      <div className="relative flex w-full flex-col gap-[4px] overflow-hidden rounded-2xl" style={{ background: "#1a1a1a" }}>
         <GradientBackdrop blobs={blobsFor(gradients, "experience")} />
         <EditButton id="experience" />
         <div className="relative z-10 flex w-full items-center justify-center" style={{ padding: 200 }}>
