@@ -265,7 +265,7 @@ export default function CaseStudyAboutMe() {
         <EditButton id="experience" />
         <div className="relative z-10 flex w-full items-center justify-center" style={{ padding: 200 }}>
           <p className="w-full" style={{ ...STMT, maxWidth: 700 }}>
-            Something about 8yrs of experience, working with people, love making tools for people.
+            8+ years in product design, building productivity and creativity tools with awesome people.
           </p>
         </div>
         <div
@@ -273,12 +273,12 @@ export default function CaseStudyAboutMe() {
           style={{ paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }}
         >
         <ExpCard logo={`${LOGOS}/adobe-firefly.webp`} company="Adobe Firefly" years="2023, 2026" role="Product designer, GenAI">
-          I lead interaction design across Firefly&apos;s generative AI tools, shipping features like Generative
-          Sound Effects and Generate Speech from idea to launch.
+          I lead interaction design for Firefly&apos;s generative AI, taking 0-to-1 tools like Generative Sound
+          Effects and Generate Speech from idea to launch.
         </ExpCard>
         <ExpCard logo={`${LOGOS}/microsoft-outlook.webp`} company="Microsoft Outlook" years="2020, 2023" role="Product designer">
-          I authored Outlook&apos;s AI email framework, later reused in Bookmarks, Viva, and Teams. As visual lead
-          I shipped 20+ themes into Fluent.
+          I led Outlook&apos;s illustration and theming systems, shipping 100+ 3D illustrations to 400 million
+          users and 20+ themes into Fluent.
         </ExpCard>
         <ExpCard logo={`${LOGOS}/microsoft-excel.webp`} company="Microsoft Excel" years="2018, 2020" role="UX Designer">
           I redesigned filtering and keyboard shortcuts on Excel for the web, and shipped 10+ Smart Templates
@@ -286,7 +286,7 @@ export default function CaseStudyAboutMe() {
         </ExpCard>
         <ExpCard logo={`${LOGOS}/CMU.webp`} company="Carnegie Mellon University" years="2016, 2018" role="M Des, Interaction Design">
           M.Des in Interaction Design. I worked with Philips and Microsoft HoloLens, TA&apos;d the Interaction
-          Design Studio for three semesters, and interned at Microsoft managing its 130+ Redmond buildings.
+          Design Studio for three semesters, and interned with the Microsoft Excel team.
         </ExpCard>
         </div>
       </div>
