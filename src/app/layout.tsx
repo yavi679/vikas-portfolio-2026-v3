@@ -5,7 +5,7 @@ import "./globals.css";
 const geist = Geist({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://vikas-portfolio-2026-v3.vercel.app"),
+  metadataBase: new URL("https://www.vikas.design"),
   title: "Vikas Yadav — Product Designer",
   description: "Portfolio of Vikas Yadav, Product Designer.",
   openGraph: {
