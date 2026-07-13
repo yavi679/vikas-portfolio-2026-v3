@@ -138,11 +138,16 @@ export default function CaseStudyUXRedesigns() {
       {/* Outcome + credits — one container */}
       <OutcomeCredits
         outcome={
-          <p className="leading-[1.35]">
-            Shipped redesigned sorting, filtering, and shortcut systems on Excel for the web. They made
-            everyday actions more approachable for new users while keeping the depth power users rely
-            on.
-          </p>
+          <>
+            <p className="leading-[1.35]">
+              The goal was to lift Excel web&apos;s NPS by making its core features feel modern and
+              competitive with Google Sheets, Excel&apos;s main rival.
+            </p>
+            <p className="leading-[1.35]">
+              I shipped redesigned sorting, filtering, and shortcut systems that made everyday actions
+              more approachable for new users while keeping the depth power users rely on.
+            </p>
+          </>
         }
         contributions="Web UX, Interaction design, Visual design"
         credits="Christian Canton, Alex Malkievicz, Jessie Xue"

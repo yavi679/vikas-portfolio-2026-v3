@@ -164,11 +164,17 @@ export default function CaseStudySmartTemplates() {
       {/* Outcome + credits — one container */}
       <OutcomeCredits
         outcome={
-          <p className="leading-[1.35]">
-            Shipped 10+ smart templates to Microsoft 365, across health, education, planning, and
-            lifestyle. They turned the blank page into a running start for people, and gave partner
-            teams a system they could keep building on.
-          </p>
+          <>
+            <p className="leading-[1.35]">
+              Shipped 10+ smart templates that helped onboard the first million customers to Microsoft
+              365&apos;s consumer subscription.
+            </p>
+            <p className="leading-[1.35]">
+              They were the showcase for Excel&apos;s new data types, powered by live data from its
+              multi-million-dollar Wolfram partnership, and turned the blank grid into a running start
+              across health, education, planning, and lifestyle.
+            </p>
+          </>
         }
         contributions={"Web & mobile UX, Interaction design, Visual design"}
         credits="Christian Canton, Sam Radkovitz, Alex Malkievicz"

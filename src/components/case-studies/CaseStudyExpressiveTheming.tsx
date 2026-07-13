@@ -386,7 +386,7 @@ export default function CaseStudyExpressiveTheming() {
         outcome={
           <>
             <p className="leading-[1.35]">
-              Shipped a system of 10+ themes, across color, image, and pride, that replaced
+              Shipped a system of 20+ themes, across color, image, and pride, that replaced
               Outlook&apos;s fragmented banner-based customization. It works with the platform&apos;s
               surface architecture instead of sitting on top of it, so people can make the product
               their own without losing the clarity and focus they rely on.
