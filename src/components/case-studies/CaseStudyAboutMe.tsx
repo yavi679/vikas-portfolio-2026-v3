@@ -278,7 +278,7 @@ export default function CaseStudyAboutMe() {
         </ExpCard>
         <ExpCard logo={`${LOGOS}/microsoft-outlook.webp`} company="Microsoft Outlook" years="2020, 2023" role="Product designer">
           I authored Outlook&apos;s AI email framework, later reused in Bookmarks, Viva, and Teams. As visual lead
-          I shipped 17 themes into Fluent.
+          I shipped 20+ themes into Fluent.
         </ExpCard>
         <ExpCard logo={`${LOGOS}/microsoft-excel.webp`} company="Microsoft Excel" years="2018, 2020" role="UX Designer">
           I redesigned filtering and keyboard shortcuts on Excel for the web, and shipped 10+ Smart Templates
