@@ -109,7 +109,8 @@ function Showcase({
       {video && (
         <div className="absolute bottom-[4px] right-[4px] z-10 flex items-end gap-[12px]">
           {caption && (
-            <span className="leading-[1.35] whitespace-nowrap" style={LABEL}>
+            // 36px = the play+rim button height, so the text centers on the play button
+            <span className="flex items-center whitespace-nowrap" style={{ ...LABEL, height: 36 }}>
               {caption}
             </span>
           )}

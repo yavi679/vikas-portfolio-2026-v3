@@ -78,17 +78,9 @@ export default function CaseStudyRope() {
       <Pair a="watto-phone" b="watto-icons" />
       <Pair a="watto-palette" aVideo b="watto-logo" bVideo />
 
-      {/* CoCreate Salon */}
-      <MarginRow label="CoCreate Studio">
-        <Copy href="#">
-          {"My friend Yoshi is a seriously talented hairstylist. I designed the website for his studio, CoCreate, splitting it in two so people can book a cut on one side and sign up for his lessons and workshops on the other."}
-        </Copy>
-      </MarginRow>
-      <FullWidth />
-
       {/* Vessels by Vivian */}
       <MarginRow label="Vessels by Vivian">
-        <Copy href="#">
+        <Copy>
           {"Vivian makes beautiful ceramics. I designed her store around the Summer '23 collection, keeping it simple and easy to reskin each season, so she can launch a new drop without a redesign and keep orders flowing in."}
         </Copy>
       </MarginRow>
