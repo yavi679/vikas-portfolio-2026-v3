@@ -318,9 +318,10 @@ export default function CaseStudyExpressiveTheming() {
       {/* Problem — margin label + right column */}
       <MarginRow label="Problem">
         <p className="leading-[1.35]">
-          Existing themes functioned as surface-level decoration (banners, colors) without
-          integrating into the product&apos;s structure. There was no cohesive system to balance
-          personalization with usability and brand consistency.
+          Outlook&apos;s theming was decoration, banners and colors sitting on top of the product
+          instead of built into it. It didn&apos;t scale, it drifted across platforms and the sibling
+          apps people used alongside it, and there was no way to let people personalize Outlook without
+          chipping away at its clarity or its brand.
         </p>
       </MarginRow>
 
@@ -330,9 +331,9 @@ export default function CaseStudyExpressiveTheming() {
       {/* Approach — margin label + right column */}
       <MarginRow label="Approach">
         <p className="leading-[1.35]">
-          Redefined the surface architecture across Outlook, including base layers, containers, and
-          elevation systems. This lets visual layers like colors and images blend with the overall
-          app chrome while offering a personal productivity environment.
+          I rebuilt the surface architecture underneath Outlook, its base layers, containers, and
+          elevation, so a theme becomes part of the chrome rather than a coat of paint over it. Color
+          and imagery blend into the app while it still reads as a focused place to work.
         </p>
       </MarginRow>
 
@@ -383,12 +384,18 @@ export default function CaseStudyExpressiveTheming() {
       {/* Outcome + credits — one container */}
       <OutcomeCredits
         outcome={
-          <p className="leading-[1.35]">
-            Shipped a unified theming system across Outlook, replacing fragmented banner-based
-            customization with one architecture. It let people make the product their own while
-            keeping the clarity and focus they rely on, and gave partner teams a system they could
-            extend.
-          </p>
+          <>
+            <p className="leading-[1.35]">
+              Shipped a system of 10+ themes, across color, image, and pride, that replaced
+              Outlook&apos;s fragmented banner-based customization. It works with the platform&apos;s
+              surface architecture instead of sitting on top of it, so people can make the product
+              their own without losing the clarity and focus they rely on.
+            </p>
+            <p className="leading-[1.35]">
+              I aligned with the Office and Teams design teams on a shared foundation, while earning the
+              nuanced differences each product needed to stay true to itself.
+            </p>
+          </>
         }
         contributions="Cross-platform UX lead, cross-product alignment, visual system components and libraries"
         credits="Alexis Copeland, Tati Astua, Yulia M, Horacio G, Pedro Leitin, BUCK Design, Christina Ergonis, Coin Moll"

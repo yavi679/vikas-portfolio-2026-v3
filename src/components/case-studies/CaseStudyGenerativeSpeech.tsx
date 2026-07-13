@@ -18,9 +18,10 @@ export default function CaseStudyGenerativeSpeech() {
       {/* Problem — margin label + right column */}
       <MarginRow label="Problem">
         <p className="leading-[1.35]">
-          Most speech tools chased output quality and stopped there. No real control, no iteration, no
-          place in an actual creative workflow. Prompt in, audio out was too rigid for anything
-          expressive.
+          Adobe&apos;s bet in generative audio was to be a platform: its own models alongside
+          third-party ones, not a single locked-in engine. But there was no speech product to prove it
+          out, nothing to answer what competitors were shipping or to show that creators would actually
+          work across multiple models in one place.
         </p>
       </MarginRow>
 
@@ -30,10 +31,10 @@ export default function CaseStudyGenerativeSpeech() {
       {/* Approach — margin label + right column */}
       <MarginRow label="Approach">
         <p className="leading-[1.35]">
-          I framed it as a platform, not a single model, so it could host both Adobe&apos;s own speech
-          and outside voices behind one consistent set of interactions: pick a voice and hear it before
-          committing, keep a versioned history to compare takes, and audition speech segment by segment
-          with emotion-aware playback.
+          The hard part was making models from different vendors feel like one coherent tool. I
+          designed a single set of interactions that held up no matter which voice or engine sat behind
+          them: pick a voice and hear it before committing, keep a versioned history to compare takes,
+          and audition speech segment by segment with emotion-aware playback.
         </p>
         <p className="leading-[1.35]">
           I deliberately left out timeline editing and heavy text tooling. For a first release, clarity
@@ -86,11 +87,16 @@ export default function CaseStudyGenerativeSpeech() {
       {/* Outcome + credits — one container, 64px between them */}
       <OutcomeCredits
         outcome={
-          <p className="leading-[1.35]">
-            Shipped Adobe&apos;s first generative speech experience. The patterns it introduced are now
-            referenced across products like Express and Premiere, and it set Adobe up as a platform for
-            generative audio to keep building on.
-          </p>
+          <>
+            <p className="leading-[1.35]">
+              Adobe&apos;s first generative speech product, and the first to deliver on its strategy of
+              bringing multiple third-party models together with Adobe&apos;s own inside a single
+              workflow canvas.
+            </p>
+            <p className="leading-[1.35]">
+              It reached 60,000 weekly users, averaging 7.5 generations a session.
+            </p>
+          </>
         }
         contributions={"Web UX, Visual & Interaction design, Creative production"}
         credits="Smit Shah, Ashish Sharma, Jay LeBoeuf, Harmony Jiroudek, Tarun Sharma, Zeyu Jin, Adolfo Hernandez, Kevin Towes, Sarah Shen"

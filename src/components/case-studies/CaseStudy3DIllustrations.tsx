@@ -87,8 +87,8 @@ export default function CaseStudy3DIllustrations() {
         outcome={
           <>
             <p className="leading-[1.35]">
-              Produced and shipped 100+ illustrations across web, desktop, and mobile, in both light and
-              dark.
+              Helped produce and ship 100+ 3D illustrations across Outlook&apos;s web, desktop, and
+              mobile apps, in light and dark, reaching 400 million monthly users worldwide.
             </p>
             <p className="leading-[1.35]">
               They replaced a patchwork of one-off visuals with a single system, a shared library and
