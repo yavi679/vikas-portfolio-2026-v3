@@ -14,6 +14,7 @@ import CaseStudyUXRedesigns from "@/components/case-studies/CaseStudyUXRedesigns
 import CaseStudyGenerativeSFX from "@/components/case-studies/CaseStudyGenerativeSFX";
 import CaseStudyGenerativeSpeech from "@/components/case-studies/CaseStudyGenerativeSpeech";
 import CaseStudyRope from "@/components/case-studies/CaseStudyRope";
+import CoverSlideshow from "@/components/CoverSlideshow";
 
 /* Full-bleed gradient preview (the shader without the wordmark mask). */
 const MeshGradient = dynamic(
@@ -46,8 +47,9 @@ export default function PortfolioViewer() {
 
 function PortfolioStage() {
   const { params, open } = useMeshParams();
-  // Start on About Vikas — the intro/landing view.
-  const [selectedId, setSelectedId] = useState("about-me");
+  // Start on the cover slideshow — the landing view. Clicking the wordmark
+  // returns here; "about-me" is now just a regular nav card.
+  const [selectedId, setSelectedId] = useState("cover");
   const current = allProjects.find((p) => p.id === selectedId);
   const CaseStudy = caseStudies[selectedId];
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -156,28 +158,32 @@ function PortfolioStage() {
           className="flex h-full duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transition-transform"
           style={{ width: "200%", transform: open ? "translateX(-50%)" : "translateX(0)" }}
         >
-          {/* Project detail (its own scroll) */}
+          {/* Cover slideshow landing, otherwise the project detail (its own scroll) */}
           <div className="h-full w-1/2 shrink-0">
-            <div ref={scrollRef} className="h-full overflow-y-auto overscroll-none">
-              {/* key re-mounts on switch → scroll resets and the enter animation replays. */}
-              <div
-                key={selectedId}
-                className="animate-in fade-in-0 slide-in-from-bottom-[40px] duration-500 ease-out motion-reduce:animate-none"
-              >
-                {CaseStudy ? (
-                  <CaseStudy />
-                ) : (
-                  <div
-                    className="w-full flex items-center justify-center rounded-2xl"
-                    style={{ background: "#1a1a1a", minHeight: "100%" }}
-                  >
-                    <p className="leading-[1.35]" style={{ color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" }}>
-                      {current?.title} — case study coming soon.
-                    </p>
-                  </div>
-                )}
+            {selectedId === "cover" ? (
+              <CoverSlideshow />
+            ) : (
+              <div ref={scrollRef} className="h-full overflow-y-auto overscroll-none">
+                {/* key re-mounts on switch → scroll resets and the enter animation replays. */}
+                <div
+                  key={selectedId}
+                  className="animate-in fade-in-0 slide-in-from-bottom-[40px] duration-500 ease-out motion-reduce:animate-none"
+                >
+                  {CaseStudy ? (
+                    <CaseStudy />
+                  ) : (
+                    <div
+                      className="w-full flex items-center justify-center rounded-2xl"
+                      style={{ background: "#1a1a1a", minHeight: "100%" }}
+                    >
+                      <p className="leading-[1.35]" style={{ color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" }}>
+                        {current?.title} — case study coming soon.
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Full-bleed gradient preview */}
