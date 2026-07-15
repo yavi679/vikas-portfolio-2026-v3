@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"] });
@@ -31,6 +32,7 @@ export default function RootLayout({
         <div className="hidden md:block">
           {children}
         </div>
+        <Analytics />
       </body>
     </html>
   );
