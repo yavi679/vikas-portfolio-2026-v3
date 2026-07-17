@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import { getNavProjects } from "@/lib/projects";
 import ProjectNav from "@/components/ProjectNav";
 import { MeshParamsProvider, useMeshParams } from "@/components/MeshGradientControls";
-import { GradientParamsProvider } from "@/components/GradientControls";
 import CaseStudyAboutMe from "@/components/case-studies/CaseStudyAboutMe";
 import CaseStudy3DIllustrations from "@/components/case-studies/CaseStudy3DIllustrations";
 import CaseStudyExpressiveTheming from "@/components/case-studies/CaseStudyExpressiveTheming";
@@ -15,6 +14,7 @@ import CaseStudyGenerativeSFX from "@/components/case-studies/CaseStudyGenerativ
 import CaseStudyGenerativeSpeech from "@/components/case-studies/CaseStudyGenerativeSpeech";
 import CaseStudyRope from "@/components/case-studies/CaseStudyRope";
 import CoverSlideshow from "@/components/CoverSlideshow";
+import SoundController from "@/components/SoundController";
 
 /* Full-bleed gradient preview (the shader without the wordmark mask). */
 const MeshGradient = dynamic(
@@ -38,9 +38,7 @@ const allProjects = getNavProjects();
 export default function PortfolioViewer() {
   return (
     <MeshParamsProvider>
-      <GradientParamsProvider>
-        <PortfolioStage />
-      </GradientParamsProvider>
+      <PortfolioStage />
     </MeshParamsProvider>
   );
 }
@@ -145,6 +143,7 @@ function PortfolioStage() {
 
   return (
     <div className="h-screen w-screen overflow-hidden flex gap-[4px] p-[4px]" style={{ background: "#0a0a0a" }}>
+      <SoundController />
       {/* Column 1 — project nav (owns its own scroll for the stacking effect) */}
       <div className="h-full shrink-0">
         <ProjectNav selectedId={selectedId} onSelect={setSelectedId} />

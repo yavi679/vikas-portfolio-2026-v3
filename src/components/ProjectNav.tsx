@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { getNavProjects, getProjectGroup } from "@/lib/projects";
 import { useMeshParams, MeshGradientControlPanel } from "@/components/MeshGradientControls";
-import { useGradientParams, GradientControlPanel } from "@/components/GradientControls";
+import { playTick, playTap } from "@/lib/sound";
 
 /* Paper Shaders animated mesh gradient behind the wordmark. Canvas/WebGL,
    so load client-only (the #1a1a1a panel shows until it mounts). */
@@ -32,16 +32,16 @@ const PEEK = 6; // px each stacked card lifts above the one in front (fan)
 
 export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
   const { params, open, setOpen } = useMeshParams();
-  const { editing, close: closeGradient } = useGradientParams();
   const [everOpened, setEverOpened] = useState(false); // gate the cards' re-entry animation to closes only
 
-  // Cards animate back in from the bottom after either panel has been opened.
+  // Cards animate back in from the bottom after the Remix panel has been opened.
   useEffect(() => {
-    if (open || editing) setEverOpened(true);
-  }, [open, editing]);
+    if (open) setEverOpened(true);
+  }, [open]);
   const scrollerRef = useRef<HTMLElement>(null);
   const wordmarkRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const prevTop = useRef(0); // # of cards receded at the top — a detent tick fires when it changes
 
   useEffect(() => {
     const scroller = scrollerRef.current;
@@ -86,6 +86,11 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
           el.style.zIndex = "1000";
         }
       }
+      // Soft detent tick each time a card crosses under the wordmark (rising pitch as you go).
+      if (depthTop !== prevTop.current) {
+        playTick();
+        prevTop.current = depthTop;
+      }
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
@@ -123,7 +128,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            if (!open) closeGradient();
+            playTap();
             setOpen((o) => !o);
           }}
           className={`absolute left-[4px] top-[4px] z-20 flex h-9 items-center rounded-full bg-[#333] px-4 text-[#b3b3b3] transition-all hover:bg-[#4d4d4d] hover:text-[#e6e6e6] ${
@@ -153,8 +158,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
       {/* A panel (Remix shader, or the About header gradient) takes over the card
           space; otherwise the cards. */}
       {open && <MeshGradientControlPanel />}
-      {!open && editing && <GradientControlPanel />}
-      {!open && !editing && (
+      {!open && (
         <div
           className={`flex w-full flex-col gap-[4px] ${
             everOpened ? "duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] animate-in fade-in slide-in-from-bottom-[40px]" : ""
@@ -166,6 +170,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
             return (
               <button
             key={p.id}
+            data-sound="open"
             ref={(el) => {
               cardRefs.current[i] = el;
             }}

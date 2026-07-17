@@ -8,7 +8,7 @@
 
 import { useState, useEffect } from "react";
 
-const COUNT = 22;
+const COUNT = 23;
 const SLIDES = Array.from({ length: COUNT }, (_, i) => `/cover/slide-${String(i + 1).padStart(2, "0")}.webp`);
 const INTERVAL = 1500; // ms between slides
 const FADE = 200; // ms crossfade

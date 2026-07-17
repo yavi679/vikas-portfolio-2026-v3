@@ -6,40 +6,28 @@
 
 import { useState, useEffect, useRef } from "react";
 import LiquidSlideshow from "./LiquidSlideshow";
-import GradientBackdrop, { type GBlob } from "@/components/GradientBackdrop";
-import { useGradientParams, blobsFor } from "@/components/GradientControls";
-
-/* Per-region gradient editor toggle. Hidden now that the gradients are dialed in;
-   the editing system stays wired, so returning the button re-enables it. */
-function EditButton(_props: { id: string }) {
-  return null;
-}
 
 /* Light display statement (42px in Figma → 2.625rem at this project's 14px root). */
 const STMT = { color: "#e6e6e6", fontSize: "2.625rem", fontWeight: 300, letterSpacing: "-0.84px", lineHeight: 1.1 } as const;
 const META = { color: "#e6e6e6", fontSize: "1rem", letterSpacing: "-0.48px" } as const;
 const BODY = { color: "#808080", fontSize: "1rem", letterSpacing: "-0.48px" } as const;
 
-/* A display statement on its own filled panel, centered reading column.
-   `backdrop` layers the Gradient 1 bloom behind the text (used for the header). */
-function Statement({
-  children,
-  backdrop = false,
-  blobs,
-  editId,
-}: {
-  children: React.ReactNode;
-  backdrop?: boolean;
-  blobs?: GBlob[];
-  editId?: string;
-}) {
+/* Per-section glow background — art-directed per panel in Figma (each has its
+   own directional balance + off-center core). Baked to a small webp and
+   stretched to fill (object-fill, NOT cover) so it fills any panel size without
+   cropping the rim; the soft glow hides the slight non-uniform stretch. */
+function Bg({ src }: { src: string }) {
+  return <img src={src} alt="" aria-hidden className="pointer-events-none absolute inset-0 h-full w-full object-fill" />;
+}
+
+/* A display statement on its own glow panel, centered reading column. */
+function Statement({ children, bg }: { children: React.ReactNode; bg: string }) {
   return (
     <div
       className="relative flex w-full justify-center overflow-hidden rounded-2xl"
       style={{ background: "#1a1a1a", padding: 200 }}
     >
-      {backdrop && <GradientBackdrop blobs={blobs} />}
-      {editId && <EditButton id={editId} />}
+      <Bg src={bg} />
       <p className="relative z-10 w-full" style={{ ...STMT, maxWidth: 700 }}>
         {children}
       </p>
@@ -47,16 +35,14 @@ function Statement({
   );
 }
 
-/* Intro header — the display statement over its own editable Gradient 1 bloom. */
+/* Intro header — the display statement over its glow background. */
 function IntroHeader() {
-  const { gradients } = useGradientParams();
   return (
     <div
       className="relative flex w-full justify-center overflow-hidden rounded-2xl"
       style={{ background: "#1a1a1a", padding: 200 }}
     >
-      <GradientBackdrop blobs={blobsFor(gradients, "intro")} />
-      <EditButton id="intro" />
+      <Bg src={`${MEDIA}/bg-intro.webp`} />
       <p className="relative z-10 w-full" style={{ ...STMT, maxWidth: 700 }}>
         <img
           src={`${MEDIA}/waving-hand.webp`}
@@ -239,7 +225,6 @@ const HERO_IMAGES = Array.from({ length: 10 }, (_, i) => `${MEDIA}/interest-${i 
 const LOGOS = "/projects/app-logos";
 
 export default function CaseStudyAboutMe() {
-  const { gradients } = useGradientParams();
   return (
     <div className="flex flex-col gap-[4px] items-center w-full">
       {/* Intro — editable gradient header */}
@@ -251,8 +236,7 @@ export default function CaseStudyAboutMe() {
           className="relative flex items-center min-w-px overflow-hidden rounded-2xl"
           style={{ width: "calc(50% - 2px)", background: "#1a1a1a", paddingLeft: 90, paddingRight: 90 }}
         >
-          <GradientBackdrop blobs={blobsFor(gradients, "inspiration")} />
-          <EditButton id="inspiration" />
+          <Bg src={`${MEDIA}/bg-inspiration.webp`} />
           <p className="relative z-10" style={STMT}>I look for things in the world that make my heart go 💗</p>
         </div>
         {/* Hero — liquid-distortion slideshow of personal interests */}
@@ -261,8 +245,7 @@ export default function CaseStudyAboutMe() {
 
       {/* Experience — quote + 2x2 cards combined in one rounded panel */}
       <div className="relative flex w-full flex-col gap-[4px] overflow-hidden rounded-2xl" style={{ background: "#1a1a1a" }}>
-        <GradientBackdrop blobs={blobsFor(gradients, "experience")} />
-        <EditButton id="experience" />
+        <Bg src={`${MEDIA}/bg-experience.webp`} />
         <div className="relative z-10 flex w-full items-center justify-center" style={{ padding: 200 }}>
           <p className="w-full" style={{ ...STMT, maxWidth: 700 }}>
             8+ years in product design, building productivity and creativity tools with awesome people.
@@ -291,8 +274,8 @@ export default function CaseStudyAboutMe() {
         </div>
       </div>
 
-      {/* What inspires me */}
-      <Statement backdrop editId="inspires" blobs={blobsFor(gradients, "inspires")}>
+      {/* Creations intro */}
+      <Statement bg={`${MEDIA}/bg-creations.webp`}>
         I came to product design from architecture, chasing the same things: texture, light, and the way nature
         holds them. These are my attempts to observe those closely, then bend them towards play.
       </Statement>
