@@ -26,7 +26,7 @@ interface ProjectNavProps {
    (later cards paint in front via ascending z-index). Scrubbed per scroll frame. */
 
 const PERSP = 1000; // per-card perspective (px); origin set per side so each end recedes toward its own edge
-const RANGE = 200; // px of scroll over which a passed card fully recedes
+const RANGE = 120; // px of scroll over which a passed card fully recedes
 const DEPTH = 600; // px pushed back in 3D at full recede (~0.55 apparent scale)
 const PEEK = 6; // px each stacked card lifts above the one in front (fan)
 
@@ -63,7 +63,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
           // above the top line → recede up into the stack
           const past = topFocal - vp;
           const t = Math.min(past / RANGE, 1);
-          const fade = t < 0.85 ? 1 : 1 - (t - 0.85) / 0.15;
+          const fade = t < 0.3 ? 1 : Math.max(0, 1 - (t - 0.3) / 0.35);
           el.style.transformOrigin = "50% 0%"; // recede toward its top edge → up, behind the wordmark
           el.style.transform = `perspective(${PERSP}px) translateY(${past - depthTop * PEEK}px) translateZ(${-t * DEPTH}px)`;
           el.style.opacity = String(Math.max(fade, 0));
@@ -73,7 +73,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
           // below the bottom line → recede down into the stack (mirror of the top)
           const past = vp - bottomFocal;
           const t = Math.min(past / RANGE, 1);
-          const fade = t < 0.85 ? 1 : 1 - (t - 0.85) / 0.15;
+          const fade = t < 0.3 ? 1 : Math.max(0, 1 - (t - 0.3) / 0.35);
           el.style.transformOrigin = "50% 100%"; // recede toward its bottom edge → down (mirror of top)
           el.style.transform = `perspective(${PERSP}px) translateY(${-past + depthBot * PEEK}px) translateZ(${-t * DEPTH}px)`;
           el.style.opacity = String(Math.max(fade, 0));
@@ -102,6 +102,48 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
     return () => {
       scroller.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  // Smooth, relaxed wheel scrolling: accumulate a target and ease the scroll
+  // position toward it each frame (the stacking `update` above rides along on
+  // the resulting scroll events).
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    const EASE = 0.1; // lower = more relaxed glide
+    let target = scroller.scrollTop;
+    let raf = 0;
+    let animating = false;
+
+    const maxY = () => scroller.scrollHeight - scroller.clientHeight;
+    const tick = () => {
+      const diff = target - scroller.scrollTop;
+      if (Math.abs(diff) < 0.5) {
+        scroller.scrollTop = target;
+        animating = false;
+        raf = 0;
+        return;
+      }
+      scroller.scrollTop += diff * EASE;
+      raf = requestAnimationFrame(tick);
+    };
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey) return; // let pinch-zoom through
+      e.preventDefault();
+      if (!animating) target = scroller.scrollTop; // resync at the start of a gesture
+      const delta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY; // normalize line vs pixel
+      target = Math.max(0, Math.min(maxY(), target + delta));
+      if (!animating) {
+        animating = true;
+        raf = requestAnimationFrame(tick);
+      }
+    };
+
+    scroller.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      scroller.removeEventListener("wheel", onWheel);
       if (raf) cancelAnimationFrame(raf);
     };
   }, []);
