@@ -121,7 +121,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
         role="button"
         aria-label="Home"
         className="group sticky top-0 z-[1100] w-full flex items-center justify-center shrink-0 relative overflow-hidden cursor-pointer"
-        style={{ background: "#1a1a1a", borderRadius: 16, padding: "20%" }}
+        style={{ borderRadius: 16, padding: "20%" }}
       >
         {/* Remix — reveals on wordmark hover; toggles the shader parameter pane */}
         <button
