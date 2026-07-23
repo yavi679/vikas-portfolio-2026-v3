@@ -65,7 +65,9 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
           const t = Math.min(past / RANGE, 1);
           const fade = t < 0.3 ? 1 : Math.max(0, 1 - (t - 0.3) / 0.35);
           el.style.transformOrigin = "50% 0%"; // recede toward its top edge → up, behind the wordmark
-          el.style.transform = `perspective(${PERSP}px) translateY(${past - depthTop * PEEK}px) translateZ(${-t * DEPTH}px)`;
+          // Fan lift scales with t so a barely-receded card (e.g. pinned at max scroll)
+          // isn't yanked up out of its slot while still fully opaque — that opened a gap.
+          el.style.transform = `perspective(${PERSP}px) translateY(${past - depthTop * PEEK * t}px) translateZ(${-t * DEPTH}px)`;
           el.style.opacity = String(Math.max(fade, 0));
           el.style.zIndex = String(Math.round((1 - t) * 999)); // more receded → further back
           depthTop++;
@@ -75,7 +77,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
           const t = Math.min(past / RANGE, 1);
           const fade = t < 0.3 ? 1 : Math.max(0, 1 - (t - 0.3) / 0.35);
           el.style.transformOrigin = "50% 100%"; // recede toward its bottom edge → down (mirror of top)
-          el.style.transform = `perspective(${PERSP}px) translateY(${-past + depthBot * PEEK}px) translateZ(${-t * DEPTH}px)`;
+          el.style.transform = `perspective(${PERSP}px) translateY(${-past + depthBot * PEEK * t}px) translateZ(${-t * DEPTH}px)`;
           el.style.opacity = String(Math.max(fade, 0));
           el.style.zIndex = String(Math.round((1 - t) * 999));
           depthBot++;
@@ -131,6 +133,7 @@ export default function ProjectNav({ selectedId, onSelect }: ProjectNavProps) {
     };
     const onWheel = (e: WheelEvent) => {
       if (e.ctrlKey) return; // let pinch-zoom through
+      if ((e.target as HTMLElement).closest("[data-inner-scroll]")) return; // let nested panels (e.g. Remix settings) scroll natively
       e.preventDefault();
       if (!animating) target = scroller.scrollTop; // resync at the start of a gesture
       const delta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY; // normalize line vs pixel

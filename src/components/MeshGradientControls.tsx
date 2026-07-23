@@ -136,6 +136,7 @@ export function MeshGradientControlPanel() {
 
   return (
     <div
+      data-inner-scroll
       className="relative min-h-0 w-full flex-1 overflow-y-auto rounded-2xl duration-300 ease-out animate-in fade-in slide-in-from-top-[40px]"
       style={{ background: "#1a1a1a" }}
     >
