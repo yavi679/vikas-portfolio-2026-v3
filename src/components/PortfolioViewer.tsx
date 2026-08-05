@@ -16,6 +16,11 @@ import CaseStudyRope from "@/components/case-studies/CaseStudyRope";
 import CoverSlideshow from "@/components/CoverSlideshow";
 import SoundController from "@/components/SoundController";
 
+// Landing blur reveal: the whole landing starts blurred and clears to sharp on load.
+const BLUR_AMOUNT = 100; // px peak blur on load
+const REVEAL_MS = 1000; // ms blurred → clear
+const REVEAL_CURVE = "cubic-bezier(0.16, 1, 0.3, 1)"; // Expo out
+
 /* Full-bleed gradient preview (the shader without the wordmark mask). */
 const MeshGradient = dynamic(
   () => import("@paper-design/shaders-react").then((m) => m.MeshGradient),
@@ -53,6 +58,31 @@ function PortfolioStage() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const targetY = useRef(0);
   const rafId = useRef<number | null>(null);
+
+  // Landing blur reveal — the whole landing (nav + cover) starts blurred and
+  // clears to sharp on load. Once clear we drop to filter:none so no blur
+  // containing-block/compositing layer lingers, and flag `revealed` so the cover
+  // slideshow only begins advancing after the landing has finished loading.
+  const [blur, setBlur] = useState(BLUR_AMOUNT);
+  const [transMs, setTransMs] = useState(0);
+  const [plain, setPlain] = useState(false);
+  const [revealed, setRevealed] = useState(false);
+  useEffect(() => {
+    const raf = requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        setTransMs(REVEAL_MS);
+        setBlur(0);
+      })
+    );
+    const done = window.setTimeout(() => {
+      setPlain(true);
+      setRevealed(true);
+    }, REVEAL_MS + 80);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(done);
+    };
+  }, []);
 
   // Mount the preview canvas while Remix is open (and through the slide-back), so
   // it never blanks mid-transition and isn't left running when idle.
@@ -142,12 +172,21 @@ function PortfolioStage() {
   }, []);
 
   return (
-    <div className="h-screen w-screen overflow-hidden flex gap-[4px] p-[4px]" style={{ background: "#0a0a0a" }}>
+    <div className="relative h-screen w-screen overflow-hidden" style={{ background: "#0a0a0a" }}>
       <SoundController />
-      {/* Column 1 — project nav (owns its own scroll for the stacking effect) */}
-      <div className="h-full shrink-0">
-        <ProjectNav selectedId={selectedId} onSelect={setSelectedId} />
-      </div>
+      {/* Landing blur-reveal layer — blurs every element of the landing, clears on load. */}
+      <div
+        className="h-full w-full flex gap-[4px] p-[4px]"
+        style={{
+          filter: plain ? "none" : `blur(${blur}px)`,
+          transition: `filter ${transMs}ms ${REVEAL_CURVE}`,
+          willChange: plain ? undefined : "filter",
+        }}
+      >
+        {/* Column 1 — project nav (owns its own scroll for the stacking effect) */}
+        <div className="h-full shrink-0">
+          <ProjectNav selectedId={selectedId} onSelect={setSelectedId} />
+        </div>
 
       {/* Columns 2–4 — a horizontal track: project detail, then the gradient
           preview. Remix (open) slides the preview in from the right, pushing the
@@ -160,7 +199,7 @@ function PortfolioStage() {
           {/* Cover slideshow landing, otherwise the project detail (its own scroll) */}
           <div className="h-full w-1/2 shrink-0">
             {selectedId === "cover" ? (
-              <CoverSlideshow />
+              <CoverSlideshow start={revealed} />
             ) : (
               <div ref={scrollRef} className="h-full overflow-y-auto overscroll-none">
                 {/* key re-mounts on switch → scroll resets and the enter animation replays. */}
@@ -194,6 +233,7 @@ function PortfolioStage() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
